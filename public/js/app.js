@@ -2534,6 +2534,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      validEmailMsg: '',
+      invalidEmailMsg: '',
       roles: [],
       snackbarText: '',
       selected: [],
@@ -2612,6 +2614,20 @@ __webpack_require__.r(__webpack_exports__);
     this.initialize();
   },
   methods: {
+    checkValidMail: function checkValidMail() {
+      var _this = this;
+
+      var mail = this.editedItem.email;
+      axios.post('/api/user/verifyEmail', {
+        'email': mail
+      }).then(function (res) {
+        _this.validEmailMsg = res.data.msg;
+        _this.invalidEmailMsg = '';
+      })["catch"](function (err) {
+        _this.validEmailMsg = '';
+        _this.invalidEmailMsg = 'این ایمیل قبلا توسط کاربر دیگری ثبت شده است ';
+      });
+    },
     selectAll: function selectAll(e) {
       this.selected = [];
 
@@ -2622,7 +2638,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deleteAll: function deleteAll() {
-      var _this = this;
+      var _this2 = this;
 
       var decide = confirm(' آیا برای حذف این آیتم  ها اطمینان دارید؟');
 
@@ -2630,38 +2646,38 @@ __webpack_require__.r(__webpack_exports__);
         axios.post('/api/user/delete', {
           'users': this.selected
         }).then(function (res) {
-          _this.selected.map(function (value) {
-            var index = _this.desserts.data.indexOf(value);
+          _this2.selected.map(function (value) {
+            var index = _this2.desserts.data.indexOf(value);
 
-            _this.desserts.data.splice(index, 1);
+            _this2.desserts.data.splice(index, 1);
           }); //snackbar setting
 
 
-          _this.snackbarColor = 'success';
-          _this.snackbarText = 'این آیتم ها با موفقیت حذف شندند !  ';
-          _this.snackbar = true;
+          _this2.snackbarColor = 'success';
+          _this2.snackbarText = 'این آیتم ها با موفقیت حذف شندند !  ';
+          _this2.snackbar = true;
         })["catch"](function (err) {
-          _this.snackbarColor = 'error';
-          _this.snackbarText = err.response.data.state;
-          _this.snackbar = true;
+          _this2.snackbarColor = 'error';
+          _this2.snackbarText = err.response.data.state;
+          _this2.snackbar = true;
         });
       }
     },
     search: function search(e) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (e.length > 3) {
         axios.get('/api/user/' + e).then(function (res) {
-          _this2.desserts = res.data.user;
+          _this3.desserts = res.data.user;
         })["catch"](function (err) {});
       } else if (e.length == 0) {
         axios.get('/api/user').then(function (res) {
-          _this2.desserts = res.data.user;
+          _this3.desserts = res.data.user;
         })["catch"](function (err) {});
       }
     },
     paginate: function paginate(e) {
-      var _this3 = this;
+      var _this4 = this;
 
       var parameters = {
         'params': {
@@ -2669,31 +2685,31 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.get('/api/user?page=' + e.page, parameters).then(function (res) {
-        _this3.desserts = res.data.user;
-        _this3.roles = res.data.roles;
+        _this4.desserts = res.data.user;
+        _this4.roles = res.data.roles;
       })["catch"](function (err) {
         if (err.response.status == 401) {
           localStorage.removeItem('token');
 
-          _this3.$router.push('/login');
+          _this4.$router.push('/login');
         }
       });
     },
     initialize: function initialize() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.interceptors.request.use(function (config) {
-        _this4.loading = true;
+        _this5.loading = true;
         return config;
       }, function (error) {
-        _this4.loading = false;
+        _this5.loading = false;
         return Promise.reject(error);
       });
       axios.interceptors.response.use(function (response) {
-        _this4.loading = false;
+        _this5.loading = false;
         return response;
       }, function (error) {
-        _this4.loading = false;
+        _this5.loading = false;
         return Promise.reject(error);
       });
     },
@@ -2703,32 +2719,32 @@ __webpack_require__.r(__webpack_exports__);
       this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
-      var _this5 = this;
+      var _this6 = this;
 
       var index = this.desserts.data.indexOf(item);
       var decide = confirm(' آیا برای حذف این آیتم اطمینان دارید؟');
 
       if (decide) {
         axios["delete"]('/api/user/' + item.id).then(function (res) {
-          _this5.desserts.data.splice(index, 1);
+          _this6.desserts.data.splice(index, 1);
 
-          _this5.snackbarColor = 'error';
-          _this5.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
-          _this5.snackbar = true;
+          _this6.snackbarColor = 'error';
+          _this6.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
+          _this6.snackbar = true;
         })["catch"](function (err) {});
       }
     },
     close: function close() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this6.editedItem = Object.assign({}, _this6.defaultItem);
-        _this6.editedIndex = -1;
+        _this7.editedItem = Object.assign({}, _this7.defaultItem);
+        _this7.editedIndex = -1;
       }, 300);
     },
     save: function save() {
-      var _this7 = this;
+      var _this8 = this;
 
       if (this.editedIndex > -1) {
         axios.put('/api/user/' + this.editedItem.id, {
@@ -2736,10 +2752,10 @@ __webpack_require__.r(__webpack_exports__);
           'email': this.editedItem.email,
           'role': this.editedItem.role
         }).then(function (res) {
-          _this7.snackbarColor = 'success';
-          _this7.snackbarText = 'ویرایش انجام شد !';
-          _this7.snackbar = true;
-          Object.assign(_this7.desserts.data[_this7.editedIndex], res.data.user);
+          _this8.snackbarColor = 'success';
+          _this8.snackbarText = 'ویرایش انجام شد !';
+          _this8.snackbar = true;
+          Object.assign(_this8.desserts.data[_this8.editedIndex], res.data.user);
         })["catch"](function (err) {});
       } else {
         axios.post('/api/user', {
@@ -2747,11 +2763,11 @@ __webpack_require__.r(__webpack_exports__);
           'email': this.editedItem.email,
           'role': this.editedItem.role
         }).then(function (res) {
-          _this7.desserts.data.push(res.data.user);
+          _this8.desserts.data.push(res.data.user);
 
-          _this7.snackbarColor = 'success';
-          _this7.snackbarText = 'با موفقیت اضافه شد !';
-          _this7.snackbar = true;
+          _this8.snackbarColor = 'success';
+          _this8.snackbarText = 'با موفقیت اضافه شد !';
+          _this8.snackbar = true;
         })["catch"](function (err) {});
       }
 
@@ -21246,10 +21262,16 @@ var render = function() {
                                             _vm._v(" "),
                                             _c("v-text-field", {
                                               attrs: {
+                                                color: "error",
+                                                "error-messages":
+                                                  _vm.invalidEmailMsg,
+                                                "success-messages":
+                                                  _vm.validEmailMsg,
                                                 rules: _vm.emailRules,
                                                 required: "",
                                                 label: "ایمیل"
                                               },
+                                              on: { blur: _vm.checkValidMail },
                                               model: {
                                                 value: _vm.editedItem.email,
                                                 callback: function($$v) {

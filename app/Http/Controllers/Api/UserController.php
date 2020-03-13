@@ -123,4 +123,12 @@ class UserController extends Controller
             }
         }
     }
+
+    public function verifyEmail(Request $request)
+    {
+         $request->validate([
+             'email'=>'unique:users',
+         ]);
+        return response()->json(['msg','این ایمیل قابل ثبت نیست'],200);
+    }
 }

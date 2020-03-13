@@ -55,7 +55,7 @@
                                         v-model="valid"
                                         >
                                             <v-text-field v-model="editedItem.name" :rules="nameRules" required label="نام"></v-text-field>
-                                            <v-text-field v-model="editedItem.email" :rules="emailRules" required label="ایمیل"></v-text-field>
+                                            <v-text-field color="error" @blur="checkValidMail" :error-messages="invalidEmailMsg" :success-messages="validEmailMsg" v-model="editedItem.email" :rules="emailRules" required label="ایمیل"></v-text-field>
                                         <v-select
                                             v-model="editedItem.role"
                                             :items="roles"
@@ -129,6 +129,8 @@
 <script>
     export default {
         data: () => ({
+            validEmailMsg:'',
+            invalidEmailMsg:'',
             roles:[],
             snackbarText:'',
             selected:[],
@@ -193,6 +195,19 @@
             this.initialize()
         },
         methods: {
+            checkValidMail()
+            {
+                let mail=this.editedItem.email;
+                axios.post('/api/user/verifyEmail',{
+                    'email':mail
+                }).then(res=>{
+                    this.validEmailMsg=res.data.msg;
+                    this.invalidEmailMsg='';
+                }).catch(err=>{
+                        this.validEmailMsg='';
+                        this.invalidEmailMsg='این ایمیل قبلا توسط کاربر دیگری ثبت شده است ';
+                });
+            },
             selectAll(e){
                 this.selected=[];
                 if(e.length>0){
