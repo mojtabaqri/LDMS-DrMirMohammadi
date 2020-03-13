@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'IranSans';
+    src: url('/fonts/IranSans/eot/IRANSansWeb(FaNum)_Light.eot'); /* IE9 Compat Modes */
+    src: url('/fonts/IranSans/eot/IRANSansWeb(FaNum)_Light.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/fonts/IranSans/woff2/IRANSansWeb(FaNum)_Light.woff2') format('woff2'), /* Super Modern Browsers */
+    url('/fonts/IranSans/woff/IRANSansWeb(FaNum)_Light.woff') format('woff'), /* Pretty Modern Browsers */
+    url('/fonts/IranSans/ttf/IRANSansWeb(FaNum)_Light.ttf ')
+    format('truetype')/* Safari, Android, iOS */
+}
+a:link{
+    text-decoration: none!important;
+}
+* ,.v-application .title ,.v-application .headline{
+    font-family: IranSans !important;
+}
+
