@@ -93,6 +93,22 @@
                 </v-btn>
             </v-snackbar>
         </template>
+        <template v-slot:item.role="{ item }">
+            <v-edit-dialog large block persistent :return-value.sync="item.role"  @save="updateRole(item)">
+                {{item.role}}
+                <template v-slot:input>
+                    <h1>تغیر سطح دسترسی </h1>
+                </template>
+                <template v-slot:input>
+                    <v-select
+                        v-model="item.role"
+                        :items="roles"
+                        label="سطح دسترسی"
+                    ></v-select>
+                </template>
+
+            </v-edit-dialog>
+        </template>
         <template v-slot:item.photo="{ item }">
             <v-img
                 :src="item.photo"
@@ -195,6 +211,23 @@
             this.initialize()
         },
         methods: {
+            updateRole(item){
+                const index = this.desserts.data.indexOf(item);
+                    axios.post('/api/user/updateRole',{
+                        'role':item.role,'id':item.id,
+                    }).then(res => {
+                        this.snackbarColor='success';
+                        this.snackbarText =res.data.msg;
+                        this.snackbar=true;
+
+                    }).catch(err => {
+                        this.desserts.data[index].role=err.response.data.user.role
+                        this.snackbarText ='سمت تغیر نکرد'
+                        this.snackbarColor='error';
+                        this.snackbar=true;
+                    });
+
+            },
             checkValidMail()
             {
                 let mail=this.editedItem.email;

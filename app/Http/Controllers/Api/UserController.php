@@ -131,4 +131,19 @@ class UserController extends Controller
          ]);
         return response()->json(['msg','این ایمیل قابل ثبت نیست'],200);
     }
+
+    public function changeRole(Request $request)
+    {
+        $loggedInUser=$request->user(); //get  loggedIn user
+        $updateRole=$request->role; //get role name from admin
+        $id=$request->id; // get id of user from admin
+        $user=User::find($id);
+        if($loggedInUser===$user->id)
+            return response()->json(['user'=>new UserResource($loggedInUser)],422);
+        $role=Role::where('name',$updateRole)->first();
+        $user->roles()->associate($role);
+        $user->save();
+        return response()->json(['user'=>new UserResource($user)],200);
+
+    }
 }
