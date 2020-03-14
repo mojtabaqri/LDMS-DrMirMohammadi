@@ -9,6 +9,8 @@ use App\Role;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Support\Str;
+
 class UserController extends Controller
 {
     /**
@@ -136,7 +138,7 @@ class UserController extends Controller
     {
         $loggedInUser=$request->user(); //get  loggedIn user
         $updateRole=$request->role; //get role name from admin
-        $id=$request->id; // get id of user from admin
+        $id=$request->id; // get userID  from admin
         $user=User::find($id);
         if($loggedInUser===$user->id)
             return response()->json(['user'=>new UserResource($loggedInUser)],422);
@@ -145,5 +147,16 @@ class UserController extends Controller
         $user->save();
         return response()->json(['user'=>new UserResource($user)],200);
 
+    }
+
+    public function updatePhoto(Request $request)
+    {
+           $user=User::find($request->user); //get user id => 3
+           $profile=Profile::where('user_id',$user->id)->first(); //get profile of user
+           $ext=$request->photo->extension();
+           $photo=$request->photo->storeAs('profiles',Str::random(20).".{$ext}",'public');
+           $profile->photo_path=$photo;
+           $user->profiles()->save($profile);
+           return response()->json(['user'=>new UserResource($user)],200);
     }
 }

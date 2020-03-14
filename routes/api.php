@@ -20,6 +20,7 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     Route::post('/user/verifyEmail','UserController@verifyEmail');
     Route::post('/user/delete','UserController@deleteAll');
     Route::post('/user/updateRole','UserController@changeRole');
+    Route::post('/user/updatePhoto','UserController@updatePhoto');
     Route::post('/role/delete','RoleController@deleteAll');
 });
 Route::post('login','Api\AuthController@login');

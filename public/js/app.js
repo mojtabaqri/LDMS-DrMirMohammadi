@@ -2547,6 +2547,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2595,13 +2614,13 @@ __webpack_require__.r(__webpack_exports__);
         name: '',
         email: '',
         role: '',
-        photo: ''
+        photo: null
       },
       defaultItem: {
         name: '',
         email: '',
         id: '',
-        photo: '',
+        photo: null,
         role: ''
       },
       emailRules: [function (v) {
@@ -2630,36 +2649,52 @@ __webpack_require__.r(__webpack_exports__);
     this.initialize();
   },
   methods: {
-    updateRole: function updateRole(item) {
+    updatePhoto: function updatePhoto(item) {
       var _this = this;
+
+      if (this.editedItem.photo != null) {
+        var index = this.desserts.data.indexOf(item);
+        var formData = new FormData();
+        formData.append('photo', this.editedItem.photo, this.editedItem.photo.name);
+        formData.append('user', item.id);
+        axios.post('/api/user/updatePhoto', formData).then(function (res) {
+          _this.desserts.data[index].photo = res.data.user.photo;
+          _this.editedItem.photo = null;
+        })["catch"](function (err) {
+          console.log(err.response);
+        });
+      }
+    },
+    updateRole: function updateRole(item) {
+      var _this2 = this;
 
       var index = this.desserts.data.indexOf(item);
       axios.post('/api/user/updateRole', {
         'role': item.role,
         'id': item.id
       }).then(function (res) {
-        _this.snackbarColor = 'success';
-        _this.snackbarText = res.data.msg;
-        _this.snackbar = true;
+        _this2.snackbarColor = 'success';
+        _this2.snackbarText = res.data.msg;
+        _this2.snackbar = true;
       })["catch"](function (err) {
-        _this.desserts.data[index].role = err.response.data.user.role;
-        _this.snackbarText = 'سمت تغیر نکرد';
-        _this.snackbarColor = 'error';
-        _this.snackbar = true;
+        _this2.desserts.data[index].role = err.response.data.user.role;
+        _this2.snackbarText = 'سمت تغیر نکرد';
+        _this2.snackbarColor = 'error';
+        _this2.snackbar = true;
       });
     },
     checkValidMail: function checkValidMail() {
-      var _this2 = this;
+      var _this3 = this;
 
       var mail = this.editedItem.email;
       axios.post('/api/user/verifyEmail', {
         'email': mail
       }).then(function (res) {
-        _this2.validEmailMsg = res.data.msg;
-        _this2.invalidEmailMsg = '';
+        _this3.validEmailMsg = res.data.msg;
+        _this3.invalidEmailMsg = '';
       })["catch"](function (err) {
-        _this2.validEmailMsg = '';
-        _this2.invalidEmailMsg = 'این ایمیل قبلا توسط کاربر دیگری ثبت شده است ';
+        _this3.validEmailMsg = '';
+        _this3.invalidEmailMsg = 'این ایمیل قبلا توسط کاربر دیگری ثبت شده است ';
       });
     },
     selectAll: function selectAll(e) {
@@ -2672,7 +2707,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deleteAll: function deleteAll() {
-      var _this3 = this;
+      var _this4 = this;
 
       var decide = confirm(' آیا برای حذف این آیتم  ها اطمینان دارید؟');
 
@@ -2680,38 +2715,38 @@ __webpack_require__.r(__webpack_exports__);
         axios.post('/api/user/delete', {
           'users': this.selected
         }).then(function (res) {
-          _this3.selected.map(function (value) {
-            var index = _this3.desserts.data.indexOf(value);
+          _this4.selected.map(function (value) {
+            var index = _this4.desserts.data.indexOf(value);
 
-            _this3.desserts.data.splice(index, 1);
+            _this4.desserts.data.splice(index, 1);
           }); //snackbar setting
 
 
-          _this3.snackbarColor = 'success';
-          _this3.snackbarText = 'این آیتم ها با موفقیت حذف شندند !  ';
-          _this3.snackbar = true;
+          _this4.snackbarColor = 'success';
+          _this4.snackbarText = 'این آیتم ها با موفقیت حذف شندند !  ';
+          _this4.snackbar = true;
         })["catch"](function (err) {
-          _this3.snackbarColor = 'error';
-          _this3.snackbarText = err.response.data.state;
-          _this3.snackbar = true;
+          _this4.snackbarColor = 'error';
+          _this4.snackbarText = err.response.data.state;
+          _this4.snackbar = true;
         });
       }
     },
     search: function search(e) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (e.length > 3) {
         axios.get('/api/user/' + e).then(function (res) {
-          _this4.desserts = res.data.user;
+          _this5.desserts = res.data.user;
         })["catch"](function (err) {});
       } else if (e.length == 0) {
         axios.get('/api/user').then(function (res) {
-          _this4.desserts = res.data.user;
+          _this5.desserts = res.data.user;
         })["catch"](function (err) {});
       }
     },
     paginate: function paginate(e) {
-      var _this5 = this;
+      var _this6 = this;
 
       var parameters = {
         'params': {
@@ -2719,31 +2754,31 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.get('/api/user?page=' + e.page, parameters).then(function (res) {
-        _this5.desserts = res.data.user;
-        _this5.roles = res.data.roles;
+        _this6.desserts = res.data.user;
+        _this6.roles = res.data.roles;
       })["catch"](function (err) {
         if (err.response.status == 401) {
           localStorage.removeItem('token');
 
-          _this5.$router.push('/login');
+          _this6.$router.push('/login');
         }
       });
     },
     initialize: function initialize() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.interceptors.request.use(function (config) {
-        _this6.loading = true;
+        _this7.loading = true;
         return config;
       }, function (error) {
-        _this6.loading = false;
+        _this7.loading = false;
         return Promise.reject(error);
       });
       axios.interceptors.response.use(function (response) {
-        _this6.loading = false;
+        _this7.loading = false;
         return response;
       }, function (error) {
-        _this6.loading = false;
+        _this7.loading = false;
         return Promise.reject(error);
       });
     },
@@ -2753,32 +2788,32 @@ __webpack_require__.r(__webpack_exports__);
       this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
-      var _this7 = this;
+      var _this8 = this;
 
       var index = this.desserts.data.indexOf(item);
       var decide = confirm(' آیا برای حذف این آیتم اطمینان دارید؟');
 
       if (decide) {
         axios["delete"]('/api/user/' + item.id).then(function (res) {
-          _this7.desserts.data.splice(index, 1);
+          _this8.desserts.data.splice(index, 1);
 
-          _this7.snackbarColor = 'error';
-          _this7.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
-          _this7.snackbar = true;
+          _this8.snackbarColor = 'error';
+          _this8.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
+          _this8.snackbar = true;
         })["catch"](function (err) {});
       }
     },
     close: function close() {
-      var _this8 = this;
+      var _this9 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this8.editedItem = Object.assign({}, _this8.defaultItem);
-        _this8.editedIndex = -1;
+        _this9.editedItem = Object.assign({}, _this9.defaultItem);
+        _this9.editedIndex = -1;
       }, 300);
     },
     save: function save() {
-      var _this9 = this;
+      var _this10 = this;
 
       if (this.editedIndex > -1) {
         axios.put('/api/user/' + this.editedItem.id, {
@@ -2786,10 +2821,10 @@ __webpack_require__.r(__webpack_exports__);
           'email': this.editedItem.email,
           'role': this.editedItem.role
         }).then(function (res) {
-          _this9.snackbarColor = 'success';
-          _this9.snackbarText = 'ویرایش انجام شد !';
-          _this9.snackbar = true;
-          Object.assign(_this9.desserts.data[_this9.editedIndex], res.data.user);
+          _this10.snackbarColor = 'success';
+          _this10.snackbarText = 'ویرایش انجام شد !';
+          _this10.snackbar = true;
+          Object.assign(_this10.desserts.data[_this10.editedIndex], res.data.user);
         })["catch"](function (err) {});
       } else {
         axios.post('/api/user', {
@@ -2797,11 +2832,11 @@ __webpack_require__.r(__webpack_exports__);
           'email': this.editedItem.email,
           'role': this.editedItem.role
         }).then(function (res) {
-          _this9.desserts.data.push(res.data.user);
+          _this10.desserts.data.push(res.data.user);
 
-          _this9.snackbarColor = 'success';
-          _this9.snackbarText = 'با موفقیت اضافه شد !';
-          _this9.snackbar = true;
+          _this10.snackbarColor = 'success';
+          _this10.snackbarText = 'با موفقیت اضافه شد !';
+          _this10.snackbar = true;
         })["catch"](function (err) {});
       }
 
@@ -21488,16 +21523,70 @@ var render = function() {
         fn: function(ref) {
           var item = ref.item
           return [
-            _c("v-img", {
-              staticClass: "grey lighten-2",
-              attrs: {
-                src: item.photo,
-                "lazy-src": item.photo,
-                "aspect-ratio": "1",
-                "max-width": "50",
-                "max-height": "50"
-              }
-            })
+            _c(
+              "v-edit-dialog",
+              {
+                attrs: {
+                  large: "",
+                  block: "",
+                  persistent: "",
+                  "save-text": "تغیر ",
+                  "cancel-text": "انصراف"
+                },
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "input",
+                      fn: function() {
+                        return [
+                          _c("v-file-input", {
+                            attrs: {
+                              label: "تغیر تصویر پروفایل کاربر ",
+                              accept: "image/jpg,image/png/,image/jpeg",
+                              placeholder: "تغیر"
+                            },
+                            on: {
+                              change: function($event) {
+                                return _vm.updatePhoto(item)
+                              }
+                            },
+                            model: {
+                              value: _vm.editedItem.photo,
+                              callback: function($$v) {
+                                _vm.$set(_vm.editedItem, "photo", $$v)
+                              },
+                              expression: "editedItem.photo"
+                            }
+                          })
+                        ]
+                      },
+                      proxy: true
+                    }
+                  ],
+                  null,
+                  true
+                )
+              },
+              [
+                _c(
+                  "v-list-item-avatar",
+                  [
+                    _c("v-img", {
+                      staticClass: "grey lighten-2",
+                      attrs: {
+                        src: item.photo,
+                        "lazy-src": item.photo,
+                        "aspect-ratio": "1",
+                        "max-width": "50",
+                        "max-height": "50"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ],
+              1
+            )
           ]
         }
       },

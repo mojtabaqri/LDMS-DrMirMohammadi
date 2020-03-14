@@ -110,15 +110,32 @@
             </v-edit-dialog>
         </template>
         <template v-slot:item.photo="{ item }">
-            <v-img
-                :src="item.photo"
-                :lazy-src="item.photo"
-                aspect-ratio="1"
-                class="grey lighten-2"
-                max-width="50"
-                max-height="50"
-            >
-            </v-img>
+            <v-edit-dialog large block persistent save-text="تغیر " cancel-text="انصراف">
+                <v-list-item-avatar>
+
+
+                    <v-img
+                        :src="item.photo"
+                        :lazy-src="item.photo"
+                        aspect-ratio="1"
+                        class="grey lighten-2"
+                        max-width="50"
+                        max-height="50"
+                    >
+                    </v-img>
+                </v-list-item-avatar>
+                <template v-slot:input>
+                    <v-file-input
+                        v-model="editedItem.photo"
+                        accept="image/jpg,image/png/,image/jpeg"
+                        @save="updatePhoto(item)"
+                    >
+
+                    </v-file-input>
+                </template>
+            </v-edit-dialog>
+
+
         </template>
         <template v-slot:item.action="{ item }">
             <v-icon
@@ -177,13 +194,13 @@
                 name: '',
                 email:'',
                 role:'',
-                photo:'',
+                photo: null,
             },
             defaultItem: {
                 name: '',
                 email:'',
                 id:'',
-                photo:'',
+                photo: null,
                 role:'',
 
 
@@ -211,6 +228,22 @@
             this.initialize()
         },
         methods: {
+            updatePhoto(item){
+                if(this.editedItem.photo !=null)
+                {
+                    const index = this.desserts.data.indexOf(item);
+                    let formData=new FormData();
+                    formData.append('photo',this.editedItem.photo,this.editedItem.photo.name);
+                    formData.append('user',item.id);
+                    axios.post('/api/user/updatePhoto',formData).then(res=>{
+                       this.desserts.data[index].photo=res.data.user.photo;
+                       this.editedItem.photo=null;
+                    }).catch(err=>{
+                          console.log(err.response)
+                    });
+
+                }
+            },
             updateRole(item){
                 const index = this.desserts.data.indexOf(item);
                     axios.post('/api/user/updateRole',{
