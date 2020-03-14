@@ -21435,6 +21435,8 @@ var render = function() {
               "v-edit-dialog",
               {
                 attrs: {
+                  "cancel-text": "انصراف",
+                  "save-text": "اعمال",
                   large: "",
                   block: "",
                   persistent: "",

@@ -94,7 +94,7 @@
             </v-snackbar>
         </template>
         <template v-slot:item.role="{ item }">
-            <v-edit-dialog large block persistent :return-value.sync="item.role"  @save="updateRole(item)">
+            <v-edit-dialog cancel-text="انصراف" save-text="اعمال"  large block persistent :return-value.sync="item.role"  @save="updateRole(item)">
                 {{item.role}}
                 <template v-slot:input>
                     <h1>تغیر سطح دسترسی </h1>
