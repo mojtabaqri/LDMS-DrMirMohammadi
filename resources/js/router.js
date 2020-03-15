@@ -4,7 +4,6 @@ import Login from './components/LoginComponent'
 import Admin from './components/AdminComponent'
 import Users from './components/AdminComponents/Users'
 import Demands from './components/AdminComponents/Demands'
-import Roles from './components/AdminComponents/Roles'
 
 Vue.use(VueRouter);
 const routes=[
@@ -22,11 +21,6 @@ const routes=[
                 path:"demands",
                 component:Demands,
                 name:'demands'
-            },
-            {
-                path:"roles",
-                component:Roles,
-                name:'roles'
             },
         ],
         beforeEnter:(to,from,next)=> {

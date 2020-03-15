@@ -17,7 +17,6 @@ class User extends JsonResource
         return [
             'id'=>$this->id,
             'email'=>$this->email,
-            'role'=>$this->roles->name,
             'name'=>$this->name,
             'photo'=>$this->profiles->photo_path,
             'email_verified_at'=>Verta::instance($this->email_verified_at)->format('Y/m/d  |  H:i:s'),
