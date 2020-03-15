@@ -56,11 +56,6 @@
                                         >
                                             <v-text-field v-model="editedItem.name" :rules="nameRules" required label="نام"></v-text-field>
                                             <v-text-field color="error" @blur="checkValidMail" :error-messages="invalidEmailMsg" :success-messages="validEmailMsg" v-model="editedItem.email" :rules="emailRules" required label="ایمیل"></v-text-field>
-                                        <v-select
-                                            v-model="editedItem.role"
-                                            :items="roles"
-                                            label="سطح دسترسی"
-                                        ></v-select>
                                     </v-form>
                                     </v-col>
 
@@ -93,27 +88,9 @@
                 </v-btn>
             </v-snackbar>
         </template>
-        <template v-slot:item.role="{ item }">
-            <v-edit-dialog cancel-text="انصراف" save-text="اعمال"  large block persistent :return-value.sync="item.role"  @save="updateRole(item)">
-                {{item.role}}
-                <template v-slot:input>
-                    <h1>تغیر سطح دسترسی </h1>
-                </template>
-                <template v-slot:input>
-                    <v-select
-                        v-model="item.role"
-                        :items="roles"
-                        label="سطح دسترسی"
-                    ></v-select>
-                </template>
-
-            </v-edit-dialog>
-        </template>
         <template v-slot:item.photo="{ item }">
-            <v-edit-dialog large block persistent save-text="تغیر " cancel-text="انصراف">
+            <v-edit-dialog>
                 <v-list-item-avatar>
-
-
                     <v-img
                         :src="item.photo"
                         :lazy-src="item.photo"
@@ -128,9 +105,9 @@
                     <v-file-input
                         v-model="editedItem.photo"
                         accept="image/jpg,image/png/,image/jpeg"
-                        @save="updatePhoto(item)"
-                    >
+                        @change="updatePhoto(item)"
 
+                    >
                     </v-file-input>
                 </template>
             </v-edit-dialog>
@@ -164,7 +141,6 @@
         data: () => ({
             validEmailMsg:'',
             invalidEmailMsg:'',
-            roles:[],
             snackbarText:'',
             selected:[],
             snackbarColor:'',
@@ -180,7 +156,6 @@
                     value: 'id',
                 },
                 { text: 'نام', value: 'name' },
-                { text: 'سمت  ', value: 'role' },
                 { text: 'ویرایش شده در ', value: 'updated_at' },
                 { text: 'ایمیل', value: 'email' },
                 { text: 'ایمیل تاییده شده در ', value: 'email_verified_at' },
@@ -193,7 +168,6 @@
                 id:'',
                 name: '',
                 email:'',
-                role:'',
                 photo: null,
             },
             defaultItem: {
@@ -201,7 +175,6 @@
                 email:'',
                 id:'',
                 photo: null,
-                role:'',
 
 
             },
@@ -228,6 +201,9 @@
             this.initialize()
         },
         methods: {
+            aler(){
+                alert('a')
+            },
             updatePhoto(item){
                 if(this.editedItem.photo !=null)
                 {
@@ -243,23 +219,6 @@
                     });
 
                 }
-            },
-            updateRole(item){
-                const index = this.desserts.data.indexOf(item);
-                    axios.post('/api/user/updateRole',{
-                        'role':item.role,'id':item.id,
-                    }).then(res => {
-                        this.snackbarColor='success';
-                        this.snackbarText =res.data.msg;
-                        this.snackbar=true;
-
-                    }).catch(err => {
-                        this.desserts.data[index].role=err.response.data.user.role
-                        this.snackbarText ='سمت تغیر نکرد'
-                        this.snackbarColor='error';
-                        this.snackbar=true;
-                    });
-
             },
             checkValidMail()
             {
@@ -323,7 +282,6 @@
                 };
                 axios.get('/api/user?page='+e.page,parameters).then(res=>{
                     this.desserts=res.data.user
-                    this.roles=res.data.roles
                 }).catch(err=>{
                     if(err.response.status==401)
                     {
@@ -382,7 +340,6 @@
                     axios.put('/api/user/'+this.editedItem.id,{
                         'name': this.editedItem.name,
                         'email':this.editedItem.email,
-                        'role':this.editedItem.role,
                     }).then(res=>{
                         this.snackbarColor='success';
                         this.snackbarText ='ویرایش انجام شد !';
@@ -396,7 +353,6 @@
                         {
                             'name': this.editedItem.name,
                             'email':this.editedItem.email,
-                            'role':this.editedItem.role,
 
                         }
                     ).then(res=>{

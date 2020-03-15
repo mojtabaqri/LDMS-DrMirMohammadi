@@ -98,7 +98,6 @@
             drawer: null,
             items: [
                 { icon: 'mdi-account-group-outline', text: '  مدیریت کاربران ' ,link:'users'},
-                { icon: 'mdi-human-male', text: 'نقش های سیستم ' ,link:'roles'},
                 { icon: 'mdi-account-badge-outline', text: 'آخرین مطالبات ثبت شده ' ,link:'demands'},
 
             ],

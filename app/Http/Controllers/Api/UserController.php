@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserCollection;
 use App\Profile;
-use App\Role;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Resources\User as UserResource;
@@ -21,8 +20,7 @@ class UserController extends Controller
     public function index(Request $request )
     {
         $perPage=$request->per_page;
-        $roles=Role::all()->pluck('name');
-        return response()->json(['user'=>new UserCollection(User::paginate($perPage)),'roles'=>$roles],200);
+        return response()->json(['user'=>new UserCollection(User::paginate($perPage))],200);
     }
 
     /**
@@ -43,12 +41,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $role=Role::where('name',$request->role)->first(); //get roleName of user
         $user=new User(
             [
             'name' => $request->name,'email'=>$request->email,'password'=>bcrypt('12345678')]
             );
-        $user->roles()->associate($role);
         $user->save();
         $user->profiles()->save(new Profile());
         return response()->json(['user'=>new UserResource($user)],200);
@@ -94,9 +90,6 @@ class UserController extends Controller
         $user=User::find($id);
         $user->name=$request->name;
         $user->email=$request->email;
-        $role=Role::where('name',$request->role)->first(); //get roleName of user
-        $user->roles()->dissociate($user->roles); //remove current role
-        $user->roles()->associate($role); //add new role id
         $user->save();
         return response()->json(['user'=>new UserResource($user)],200);
     }
@@ -134,20 +127,7 @@ class UserController extends Controller
         return response()->json(['msg','این ایمیل قابل ثبت نیست'],200);
     }
 
-    public function changeRole(Request $request)
-    {
-        $loggedInUser=$request->user(); //get  loggedIn user
-        $updateRole=$request->role; //get role name from admin
-        $id=$request->id; // get userID  from admin
-        $user=User::find($id);
-        if($loggedInUser===$user->id)
-            return response()->json(['user'=>new UserResource($loggedInUser)],422);
-        $role=Role::where('name',$updateRole)->first();
-        $user->roles()->associate($role);
-        $user->save();
-        return response()->json(['user'=>new UserResource($user)],200);
 
-    }
 
     public function updatePhoto(Request $request)
     {

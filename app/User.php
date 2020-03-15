@@ -18,10 +18,6 @@ class User extends Authenticatable
         return $this->hasMany(Demand::class);
     }
 
-    public function roles()
-    {
-        return $this->belongsTo(Role::class,'role_id');
-    }
     use Notifiable;
 
     /**

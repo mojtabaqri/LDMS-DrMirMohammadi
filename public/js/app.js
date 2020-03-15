@@ -2011,10 +2011,6 @@ __webpack_require__.r(__webpack_exports__);
         text: '  مدیریت کاربران ',
         link: 'users'
       }, {
-        icon: 'mdi-human-male',
-        text: 'نقش های سیستم ',
-        link: 'roles'
-      }, {
         icon: 'mdi-account-badge-outline',
         text: 'آخرین مطالبات ثبت شده ',
         link: 'demands'
@@ -2062,334 +2058,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {},
   created: function created() {}
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Roles.vue?vue&type=script&lang=js&":
-/*!********************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AdminComponents/Roles.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      snackbarText: '',
-      selected: [],
-      snackbarColor: '',
-      snackbar: false,
-      loading: false,
-      valid: true,
-      dialog: false,
-      headers: [{
-        text: 'کد',
-        align: 'start',
-        sortable: false,
-        value: 'id'
-      }, {
-        text: 'نام',
-        value: 'name'
-      }, {
-        text: 'ایجاد شده در ',
-        value: 'created_at'
-      }, {
-        text: 'ویرایش شده در ',
-        value: 'updated_at'
-      }, {
-        text: 'عملیات',
-        value: 'action',
-        sortable: false
-      }],
-      desserts: [],
-      editedIndex: -1,
-      editedItem: {
-        id: '',
-        name: ''
-      },
-      defaultItem: {
-        name: '',
-        id: ''
-      },
-      nameRules: [function (v) {
-        return !!v || ' نام الزامی است ';
-      }, function (v) {
-        return v && v.length >= 2 || 'نام باید بیش از 1 حرف باشد';
-      }]
-    };
-  },
-  computed: {
-    formTitle: function formTitle() {
-      return this.editedIndex === -1 ? 'نقش های جدید' : 'ویرایش نقش  ';
-    }
-  },
-  watch: {
-    dialog: function dialog(val) {
-      val || this.close();
-    }
-  },
-  created: function created() {
-    this.initialize();
-  },
-  methods: {
-    selectAll: function selectAll(e) {
-      this.selected = [];
-
-      if (e.length > 0) {
-        this.selected = e.map(function (val) {
-          return val.id;
-        });
-      }
-    },
-    deleteAll: function deleteAll() {
-      var _this = this;
-
-      var decide = confirm(' آیا برای حذف این نقش  ها اطمینان دارید؟');
-
-      if (decide) {
-        axios.post('/api/role/delete', {
-          'roles': this.selected
-        }).then(function (res) {
-          _this.selected.map(function (value) {
-            var index = _this.desserts.data.indexOf(value);
-
-            _this.desserts.data.splice(index, 1);
-          }); //snackbar setting
-
-
-          _this.snackbarColor = 'success';
-          _this.snackbarText = 'این آیتم ها با موفقیت حذف شندند !  ';
-          _this.snackbar = true;
-        })["catch"](function (err) {
-          _this.snackbarColor = 'error';
-          _this.snackbarText = err.response.data.state;
-          _this.snackbar = true;
-        });
-      }
-    },
-    search: function search(e) {
-      var _this2 = this;
-
-      if (e.length > 3) {
-        axios.get('/api/role/' + e).then(function (res) {
-          _this2.desserts = res.data.role;
-        })["catch"](function (err) {});
-      } else if (e.length == 0) {
-        axios.get('/api/role').then(function (res) {
-          _this2.desserts = res.data.role;
-        })["catch"](function (err) {});
-      }
-    },
-    paginate: function paginate(e) {
-      var _this3 = this;
-
-      var parameters = {
-        'params': {
-          'per_page': e.itemsPerPage
-        }
-      };
-      axios.get('/api/role?page=' + e.page, parameters).then(function (res) {
-        _this3.desserts = res.data.role;
-      })["catch"](function (err) {
-        if (err.response.status == 401) {
-          localStorage.removeItem('token');
-
-          _this3.$router.push('/login');
-        }
-      });
-    },
-    initialize: function initialize() {
-      var _this4 = this;
-
-      axios.interceptors.request.use(function (config) {
-        _this4.loading = true;
-        return config;
-      }, function (error) {
-        _this4.loading = false;
-        return Promise.reject(error);
-      });
-      axios.interceptors.response.use(function (response) {
-        _this4.loading = false;
-        return response;
-      }, function (error) {
-        _this4.loading = false;
-        return Promise.reject(error);
-      });
-    },
-    editItem: function editItem(item) {
-      this.editedIndex = this.desserts.data.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-    deleteItem: function deleteItem(item) {
-      var _this5 = this;
-
-      var index = this.desserts.data.indexOf(item);
-      var decide = confirm(' آیا برای حذف این آیتم اطمینان دارید؟');
-
-      if (decide) {
-        axios["delete"]('/api/role/' + item.id).then(function (res) {
-          _this5.desserts.data.splice(index, 1);
-
-          _this5.snackbarColor = 'error';
-          _this5.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
-          _this5.snackbar = true;
-        })["catch"](function (err) {});
-      }
-    },
-    close: function close() {
-      var _this6 = this;
-
-      this.dialog = false;
-      setTimeout(function () {
-        _this6.editedItem = Object.assign({}, _this6.defaultItem);
-        _this6.editedIndex = -1;
-      }, 300);
-    },
-    save: function save() {
-      var _this7 = this;
-
-      if (this.editedIndex > -1) {
-        axios.put('/api/role/' + this.editedItem.id, {
-          'name': this.editedItem.name,
-          'id': this.editedItem.id
-        }).then(function (res) {
-          _this7.snackbarColor = 'success';
-          _this7.snackbarText = 'ویرایش انجام شد !';
-          _this7.snackbar = true;
-          Object.assign(_this7.desserts.data[_this7.editedIndex], res.data.role);
-        })["catch"](function (err) {});
-      } else {
-        axios.post('/api/role', {
-          'name': this.editedItem.name,
-          'id': this.editedItem.id
-        }).then(function (res) {
-          _this7.desserts.data.push(res.data.role);
-
-          _this7.snackbarColor = 'success';
-          _this7.snackbarText = 'با موفقیت اضافه شد !';
-          _this7.snackbar = true;
-        })["catch"](function (err) {});
-      }
-
-      this.close();
-    }
-  }
 });
 
 /***/ }),
@@ -2541,37 +2209,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       validEmailMsg: '',
       invalidEmailMsg: '',
-      roles: [],
       snackbarText: '',
       selected: [],
       snackbarColor: '',
@@ -2587,9 +2229,6 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'نام',
         value: 'name'
-      }, {
-        text: 'سمت  ',
-        value: 'role'
       }, {
         text: 'ویرایش شده در ',
         value: 'updated_at'
@@ -2613,15 +2252,13 @@ __webpack_require__.r(__webpack_exports__);
         id: '',
         name: '',
         email: '',
-        role: '',
         photo: null
       },
       defaultItem: {
         name: '',
         email: '',
         id: '',
-        photo: null,
-        role: ''
+        photo: null
       },
       emailRules: [function (v) {
         return !!v || ' پست الکترنیکی الزامیست! ';
@@ -2649,6 +2286,9 @@ __webpack_require__.r(__webpack_exports__);
     this.initialize();
   },
   methods: {
+    aler: function aler() {
+      alert('a');
+    },
     updatePhoto: function updatePhoto(item) {
       var _this = this;
 
@@ -2665,36 +2305,18 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
-    updateRole: function updateRole(item) {
-      var _this2 = this;
-
-      var index = this.desserts.data.indexOf(item);
-      axios.post('/api/user/updateRole', {
-        'role': item.role,
-        'id': item.id
-      }).then(function (res) {
-        _this2.snackbarColor = 'success';
-        _this2.snackbarText = res.data.msg;
-        _this2.snackbar = true;
-      })["catch"](function (err) {
-        _this2.desserts.data[index].role = err.response.data.user.role;
-        _this2.snackbarText = 'سمت تغیر نکرد';
-        _this2.snackbarColor = 'error';
-        _this2.snackbar = true;
-      });
-    },
     checkValidMail: function checkValidMail() {
-      var _this3 = this;
+      var _this2 = this;
 
       var mail = this.editedItem.email;
       axios.post('/api/user/verifyEmail', {
         'email': mail
       }).then(function (res) {
-        _this3.validEmailMsg = res.data.msg;
-        _this3.invalidEmailMsg = '';
+        _this2.validEmailMsg = res.data.msg;
+        _this2.invalidEmailMsg = '';
       })["catch"](function (err) {
-        _this3.validEmailMsg = '';
-        _this3.invalidEmailMsg = 'این ایمیل قبلا توسط کاربر دیگری ثبت شده است ';
+        _this2.validEmailMsg = '';
+        _this2.invalidEmailMsg = 'این ایمیل قبلا توسط کاربر دیگری ثبت شده است ';
       });
     },
     selectAll: function selectAll(e) {
@@ -2707,7 +2329,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deleteAll: function deleteAll() {
-      var _this4 = this;
+      var _this3 = this;
 
       var decide = confirm(' آیا برای حذف این آیتم  ها اطمینان دارید؟');
 
@@ -2715,38 +2337,38 @@ __webpack_require__.r(__webpack_exports__);
         axios.post('/api/user/delete', {
           'users': this.selected
         }).then(function (res) {
-          _this4.selected.map(function (value) {
-            var index = _this4.desserts.data.indexOf(value);
+          _this3.selected.map(function (value) {
+            var index = _this3.desserts.data.indexOf(value);
 
-            _this4.desserts.data.splice(index, 1);
+            _this3.desserts.data.splice(index, 1);
           }); //snackbar setting
 
 
-          _this4.snackbarColor = 'success';
-          _this4.snackbarText = 'این آیتم ها با موفقیت حذف شندند !  ';
-          _this4.snackbar = true;
+          _this3.snackbarColor = 'success';
+          _this3.snackbarText = 'این آیتم ها با موفقیت حذف شندند !  ';
+          _this3.snackbar = true;
         })["catch"](function (err) {
-          _this4.snackbarColor = 'error';
-          _this4.snackbarText = err.response.data.state;
-          _this4.snackbar = true;
+          _this3.snackbarColor = 'error';
+          _this3.snackbarText = err.response.data.state;
+          _this3.snackbar = true;
         });
       }
     },
     search: function search(e) {
-      var _this5 = this;
+      var _this4 = this;
 
       if (e.length > 3) {
         axios.get('/api/user/' + e).then(function (res) {
-          _this5.desserts = res.data.user;
+          _this4.desserts = res.data.user;
         })["catch"](function (err) {});
       } else if (e.length == 0) {
         axios.get('/api/user').then(function (res) {
-          _this5.desserts = res.data.user;
+          _this4.desserts = res.data.user;
         })["catch"](function (err) {});
       }
     },
     paginate: function paginate(e) {
-      var _this6 = this;
+      var _this5 = this;
 
       var parameters = {
         'params': {
@@ -2754,31 +2376,30 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.get('/api/user?page=' + e.page, parameters).then(function (res) {
-        _this6.desserts = res.data.user;
-        _this6.roles = res.data.roles;
+        _this5.desserts = res.data.user;
       })["catch"](function (err) {
         if (err.response.status == 401) {
           localStorage.removeItem('token');
 
-          _this6.$router.push('/login');
+          _this5.$router.push('/login');
         }
       });
     },
     initialize: function initialize() {
-      var _this7 = this;
+      var _this6 = this;
 
       axios.interceptors.request.use(function (config) {
-        _this7.loading = true;
+        _this6.loading = true;
         return config;
       }, function (error) {
-        _this7.loading = false;
+        _this6.loading = false;
         return Promise.reject(error);
       });
       axios.interceptors.response.use(function (response) {
-        _this7.loading = false;
+        _this6.loading = false;
         return response;
       }, function (error) {
-        _this7.loading = false;
+        _this6.loading = false;
         return Promise.reject(error);
       });
     },
@@ -2788,55 +2409,53 @@ __webpack_require__.r(__webpack_exports__);
       this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
-      var _this8 = this;
+      var _this7 = this;
 
       var index = this.desserts.data.indexOf(item);
       var decide = confirm(' آیا برای حذف این آیتم اطمینان دارید؟');
 
       if (decide) {
         axios["delete"]('/api/user/' + item.id).then(function (res) {
-          _this8.desserts.data.splice(index, 1);
+          _this7.desserts.data.splice(index, 1);
 
-          _this8.snackbarColor = 'error';
-          _this8.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
-          _this8.snackbar = true;
+          _this7.snackbarColor = 'error';
+          _this7.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
+          _this7.snackbar = true;
         })["catch"](function (err) {});
       }
     },
     close: function close() {
-      var _this9 = this;
+      var _this8 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this9.editedItem = Object.assign({}, _this9.defaultItem);
-        _this9.editedIndex = -1;
+        _this8.editedItem = Object.assign({}, _this8.defaultItem);
+        _this8.editedIndex = -1;
       }, 300);
     },
     save: function save() {
-      var _this10 = this;
+      var _this9 = this;
 
       if (this.editedIndex > -1) {
         axios.put('/api/user/' + this.editedItem.id, {
           'name': this.editedItem.name,
-          'email': this.editedItem.email,
-          'role': this.editedItem.role
+          'email': this.editedItem.email
         }).then(function (res) {
-          _this10.snackbarColor = 'success';
-          _this10.snackbarText = 'ویرایش انجام شد !';
-          _this10.snackbar = true;
-          Object.assign(_this10.desserts.data[_this10.editedIndex], res.data.user);
+          _this9.snackbarColor = 'success';
+          _this9.snackbarText = 'ویرایش انجام شد !';
+          _this9.snackbar = true;
+          Object.assign(_this9.desserts.data[_this9.editedIndex], res.data.user);
         })["catch"](function (err) {});
       } else {
         axios.post('/api/user', {
           'name': this.editedItem.name,
-          'email': this.editedItem.email,
-          'role': this.editedItem.role
+          'email': this.editedItem.email
         }).then(function (res) {
-          _this10.desserts.data.push(res.data.user);
+          _this9.desserts.data.push(res.data.user);
 
-          _this10.snackbarColor = 'success';
-          _this10.snackbarText = 'با موفقیت اضافه شد !';
-          _this10.snackbar = true;
+          _this9.snackbarColor = 'success';
+          _this9.snackbarText = 'با موفقیت اضافه شد !';
+          _this9.snackbar = true;
         })["catch"](function (err) {});
       }
 
@@ -20839,333 +20458,6 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Roles.vue?vue&type=template&id=3701b610&":
-/*!************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AdminComponents/Roles.vue?vue&type=template&id=3701b610& ***!
-  \************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("v-data-table", {
-    staticClass: "elevation-1",
-    attrs: {
-      headers: _vm.headers,
-      items: _vm.desserts.data,
-      "items-per-page": 5,
-      "show-select": "",
-      "footer-props": {
-        itemsPerPageOptions: [5, 10, 15],
-        itemsPerPageText: "نمایش  ",
-        pageText: "نقش های در این صفحه ",
-        "show-current-page": true,
-        "show-first-last-page": true
-      },
-      "sort-by": "calories",
-      loading: _vm.loading,
-      "loading-text": "اندکی صبر کنید ...."
-    },
-    on: { pagination: _vm.paginate, input: _vm.selectAll },
-    scopedSlots: _vm._u([
-      {
-        key: "top",
-        fn: function() {
-          return [
-            _c(
-              "v-toolbar",
-              { attrs: { flat: "" } },
-              [
-                _c("v-toolbar-title", [_vm._v("مدیریت نقش  های سیستم ")]),
-                _vm._v(" "),
-                _c("v-divider", {
-                  staticClass: "mx-5 mt-4",
-                  attrs: { inset: "", vertical: "" }
-                }),
-                _vm._v(" "),
-                _c(
-                  "v-col",
-                  { staticClass: "mt-3", attrs: { cols: "3", sm: "3" } },
-                  [
-                    _c("v-text-field", {
-                      attrs: { label: "جستجو..." },
-                      on: { input: _vm.search }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("v-spacer"),
-                _vm._v(" "),
-                _c(
-                  "v-dialog",
-                  {
-                    attrs: { "max-width": "500px" },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "activator",
-                        fn: function(ref) {
-                          var on = ref.on
-                          return [
-                            _c(
-                              "v-btn",
-                              _vm._g(
-                                {
-                                  staticClass: "mb-2 mx-2",
-                                  attrs: { color: "primary", dark: "" }
-                                },
-                                on
-                              ),
-                              [_vm._v("نقش  جدید")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                staticClass: "mb-2 mx-2",
-                                attrs: { color: "error", dark: "" },
-                                on: { click: _vm.deleteAll }
-                              },
-                              [_vm._v(" حذف نقش ")]
-                            )
-                          ]
-                        }
-                      }
-                    ]),
-                    model: {
-                      value: _vm.dialog,
-                      callback: function($$v) {
-                        _vm.dialog = $$v
-                      },
-                      expression: "dialog"
-                    }
-                  },
-                  [
-                    _vm._v(" "),
-                    _c(
-                      "v-card",
-                      [
-                        _c("v-card-title", [
-                          _c("span", { staticClass: "headline" }, [
-                            _vm._v(_vm._s(_vm.formTitle))
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "v-card-text",
-                          [
-                            _c(
-                              "v-container",
-                              [
-                                _c(
-                                  "v-row",
-                                  [
-                                    _c(
-                                      "v-col",
-                                      { attrs: { cols: "12", sm: "12" } },
-                                      [
-                                        _c(
-                                          "v-form",
-                                          {
-                                            ref: "form",
-                                            model: {
-                                              value: _vm.valid,
-                                              callback: function($$v) {
-                                                _vm.valid = $$v
-                                              },
-                                              expression: "valid"
-                                            }
-                                          },
-                                          [
-                                            _c("v-text-field", {
-                                              attrs: {
-                                                rules: _vm.nameRules,
-                                                required: "",
-                                                label: "نام"
-                                              },
-                                              model: {
-                                                value: _vm.editedItem.name,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.editedItem,
-                                                    "name",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression: "editedItem.name"
-                                              }
-                                            }),
-                                            _vm._v(" "),
-                                            _c("v-text-field", {
-                                              attrs: {
-                                                required: "",
-                                                label: "کد نقش"
-                                              },
-                                              model: {
-                                                value: _vm.editedItem.id,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.editedItem,
-                                                    "id",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression: "editedItem.id"
-                                              }
-                                            })
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-card-actions",
-                          [
-                            _c("v-spacer"),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "blue darken-1", text: "" },
-                                on: { click: _vm.close }
-                              },
-                              [_vm._v("انصراف")]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-btn",
-                              {
-                                attrs: {
-                                  color: "blue darken-1",
-                                  text: "",
-                                  disabled: !_vm.valid
-                                },
-                                on: { click: _vm.save }
-                              },
-                              [_vm._v("ذخیره")]
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "v-snackbar",
-              {
-                attrs: { left: true, color: _vm.snackbarColor, bottom: true },
-                model: {
-                  value: _vm.snackbar,
-                  callback: function($$v) {
-                    _vm.snackbar = $$v
-                  },
-                  expression: "snackbar"
-                }
-              },
-              [
-                _vm._v(
-                  "\n            " + _vm._s(_vm.snackbarText) + "\n            "
-                ),
-                _c(
-                  "v-btn",
-                  {
-                    attrs: { color: "white", text: "" },
-                    on: {
-                      click: function($event) {
-                        _vm.snackbar = false
-                      }
-                    }
-                  },
-                  [_vm._v("\n                بستن\n            ")]
-                )
-              ],
-              1
-            )
-          ]
-        },
-        proxy: true
-      },
-      {
-        key: "item.action",
-        fn: function(ref) {
-          var item = ref.item
-          return [
-            _c(
-              "v-icon",
-              {
-                staticClass: "mr-2",
-                attrs: { small: "" },
-                on: {
-                  click: function($event) {
-                    return _vm.editItem(item)
-                  }
-                }
-              },
-              [_vm._v("\n            mdi-pencil\n        ")]
-            ),
-            _vm._v(" "),
-            _c(
-              "v-icon",
-              {
-                attrs: { small: "" },
-                on: {
-                  click: function($event) {
-                    return _vm.deleteItem(item)
-                  }
-                }
-              },
-              [_vm._v("\n            mdi-delete\n        ")]
-            )
-          ]
-        }
-      },
-      {
-        key: "no-data",
-        fn: function() {
-          return [
-            _c(
-              "v-btn",
-              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
-              [_vm._v("نمایش از نو")]
-            )
-          ]
-        },
-        proxy: true
-      }
-    ])
-  })
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Users.vue?vue&type=template&id=3696f27a&":
 /*!************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AdminComponents/Users.vue?vue&type=template&id=3696f27a& ***!
@@ -21352,24 +20644,6 @@ var render = function() {
                                                 },
                                                 expression: "editedItem.email"
                                               }
-                                            }),
-                                            _vm._v(" "),
-                                            _c("v-select", {
-                                              attrs: {
-                                                items: _vm.roles,
-                                                label: "سطح دسترسی"
-                                              },
-                                              model: {
-                                                value: _vm.editedItem.role,
-                                                callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.editedItem,
-                                                    "role",
-                                                    $$v
-                                                  )
-                                                },
-                                                expression: "editedItem.role"
-                                              }
                                             })
                                           ],
                                           1
@@ -21462,63 +20736,6 @@ var render = function() {
         proxy: true
       },
       {
-        key: "item.role",
-        fn: function(ref) {
-          var item = ref.item
-          return [
-            _c(
-              "v-edit-dialog",
-              {
-                attrs: {
-                  "cancel-text": "انصراف",
-                  "save-text": "اعمال",
-                  large: "",
-                  block: "",
-                  persistent: "",
-                  "return-value": item.role
-                },
-                on: {
-                  "update:returnValue": function($event) {
-                    return _vm.$set(item, "role", $event)
-                  },
-                  "update:return-value": function($event) {
-                    return _vm.$set(item, "role", $event)
-                  },
-                  save: function($event) {
-                    return _vm.updateRole(item)
-                  }
-                },
-                scopedSlots: _vm._u(
-                  [
-                    {
-                      key: "input",
-                      fn: function() {
-                        return [
-                          _c("v-select", {
-                            attrs: { items: _vm.roles, label: "سطح دسترسی" },
-                            model: {
-                              value: item.role,
-                              callback: function($$v) {
-                                _vm.$set(item, "role", $$v)
-                              },
-                              expression: "item.role"
-                            }
-                          })
-                        ]
-                      },
-                      proxy: true
-                    }
-                  ],
-                  null,
-                  true
-                )
-              },
-              [_vm._v("\n            " + _vm._s(item.role) + "\n            ")]
-            )
-          ]
-        }
-      },
-      {
         key: "item.photo",
         fn: function(ref) {
           var item = ref.item
@@ -21526,13 +20743,6 @@ var render = function() {
             _c(
               "v-edit-dialog",
               {
-                attrs: {
-                  large: "",
-                  block: "",
-                  persistent: "",
-                  "save-text": "تغیر ",
-                  "cancel-text": "انصراف"
-                },
                 scopedSlots: _vm._u(
                   [
                     {
@@ -21541,9 +20751,7 @@ var render = function() {
                         return [
                           _c("v-file-input", {
                             attrs: {
-                              label: "تغیر تصویر پروفایل کاربر ",
-                              accept: "image/jpg,image/png/,image/jpeg",
-                              placeholder: "تغیر"
+                              accept: "image/jpg,image/png/,image/jpeg"
                             },
                             on: {
                               change: function($event) {
@@ -78817,75 +78025,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/AdminComponents/Roles.vue":
-/*!***********************************************************!*\
-  !*** ./resources/js/components/AdminComponents/Roles.vue ***!
-  \***********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Roles_vue_vue_type_template_id_3701b610___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Roles.vue?vue&type=template&id=3701b610& */ "./resources/js/components/AdminComponents/Roles.vue?vue&type=template&id=3701b610&");
-/* harmony import */ var _Roles_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Roles.vue?vue&type=script&lang=js& */ "./resources/js/components/AdminComponents/Roles.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Roles_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Roles_vue_vue_type_template_id_3701b610___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Roles_vue_vue_type_template_id_3701b610___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/AdminComponents/Roles.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/AdminComponents/Roles.vue?vue&type=script&lang=js&":
-/*!************************************************************************************!*\
-  !*** ./resources/js/components/AdminComponents/Roles.vue?vue&type=script&lang=js& ***!
-  \************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Roles_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Roles.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Roles.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Roles_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/AdminComponents/Roles.vue?vue&type=template&id=3701b610&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/components/AdminComponents/Roles.vue?vue&type=template&id=3701b610& ***!
-  \******************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Roles_vue_vue_type_template_id_3701b610___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Roles.vue?vue&type=template&id=3701b610& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Roles.vue?vue&type=template&id=3701b610&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Roles_vue_vue_type_template_id_3701b610___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Roles_vue_vue_type_template_id_3701b610___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
 /***/ "./resources/js/components/AdminComponents/Users.vue":
 /*!***********************************************************!*\
   !*** ./resources/js/components/AdminComponents/Users.vue ***!
@@ -79109,8 +78248,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_AdminComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/AdminComponent */ "./resources/js/components/AdminComponent.vue");
 /* harmony import */ var _components_AdminComponents_Users__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/AdminComponents/Users */ "./resources/js/components/AdminComponents/Users.vue");
 /* harmony import */ var _components_AdminComponents_Demands__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/AdminComponents/Demands */ "./resources/js/components/AdminComponents/Demands.vue");
-/* harmony import */ var _components_AdminComponents_Roles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/AdminComponents/Roles */ "./resources/js/components/AdminComponents/Roles.vue");
-
 
 
 
@@ -79130,10 +78267,6 @@ var routes = [{
     path: "demands",
     component: _components_AdminComponents_Demands__WEBPACK_IMPORTED_MODULE_5__["default"],
     name: 'demands'
-  }, {
-    path: "roles",
-    component: _components_AdminComponents_Roles__WEBPACK_IMPORTED_MODULE_6__["default"],
-    name: 'roles'
   }],
   beforeEnter: function beforeEnter(to, from, next) {
     axios.get('api/verify').then(function (res) {
