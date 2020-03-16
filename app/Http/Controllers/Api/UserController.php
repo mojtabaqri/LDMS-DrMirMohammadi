@@ -139,4 +139,9 @@ class UserController extends Controller
            $user->profiles()->save($profile);
            return response()->json(['user'=>new UserResource($user)],200);
     }
+    public function getProfile(Request $request)
+    {
+        $loggedInUser=$request->user()->first();
+        return response()->json(['user'=>new UserResource($loggedInUser)],200) ;
+    }
 }

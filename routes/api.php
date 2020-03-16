@@ -19,5 +19,6 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     Route::post('/user/verifyEmail','UserController@verifyEmail');
     Route::post('/user/delete','UserController@deleteAll');
     Route::post('/user/updatePhoto','UserController@updatePhoto');
+    Route::post('/user/getProfile','UserController@getProfile');
 });
 Route::post('login','Api\AuthController@login');

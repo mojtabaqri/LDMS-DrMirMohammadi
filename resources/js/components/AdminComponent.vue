@@ -6,6 +6,15 @@
             app
             :clipped=true
         >
+            <v-avatar class="mx-auto d-flex" size="112">
+                <v-img
+                    :src="photo"
+                    :lazy-src="photo"
+                    aspect-ratio="1"
+                    class="grey lighten-2"
+                >
+                </v-img>
+            </v-avatar>
             <v-list dense>
                 <v-list-item
                     v-for="item in items"
@@ -86,14 +95,23 @@
 </template>
 
 <script>
+    import {mapState} from  'vuex'
     export default {
+
         props: {
             source: String,
         },
+        computed:{
+         ...mapState([
+           'pic'
+         ])
+        },
         created(){
          this.$vuetify.theme.dark=true;
+         this.initialize();
         },
         data: () => ({
+            photo:'',
             theme:true,
             drawer: null,
             items: [
@@ -104,7 +122,14 @@
 
         }),
         methods:{
-            logout(){
+            initialize(){
+                axios.post('/api/user/getProfile').then(res=>{
+                    this.photo=res.data.user.photo;
+                }).catch(err=>{
+                    console.log(err.response)
+                });
+                },
+    logout(){
                 localStorage.removeItem('token');
                 this.$router.push('/login').then(res=>{console.log(res)}).catch(err=>{console.log(err)})
             }
@@ -113,6 +138,10 @@
             theme:function(oldVal,NewVal){
                 this.$vuetify.theme.dark=oldVal;
             },
+            pic:function (oldVal,newVal) {
+                this.photo=oldVal;
+            },
+
         }
 
     }

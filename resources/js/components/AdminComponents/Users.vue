@@ -137,6 +137,7 @@
 </template>
 
 <script>
+    import {mapState,mapMutations} from 'vuex';
     export default {
         data: () => ({
             validEmailMsg:'',
@@ -191,6 +192,9 @@
             formTitle () {
                 return this.editedIndex === -1 ? 'کاربر جدید' : 'ویرایش کاربر '
             },
+            ...mapState([
+                'pic'
+            ])
         },
         watch: {
             dialog (val) {
@@ -201,9 +205,9 @@
             this.initialize()
         },
         methods: {
-            aler(){
-                alert('a')
-            },
+            ...mapMutations([
+                'setProfile'
+            ]),
             updatePhoto(item){
                 if(this.editedItem.photo !=null)
                 {
@@ -214,6 +218,7 @@
                     axios.post('/api/user/updatePhoto',formData).then(res=>{
                        this.desserts.data[index].photo=res.data.user.photo;
                        this.editedItem.photo=null;
+                       this.setProfile(res.data.user.photo)
                     }).catch(err=>{
                           console.log(err.response)
                     });
