@@ -6,9 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 Use Carbon\Carbon;
+use Spatie\Permission\Traits\HasRoles;
+
 class User extends Authenticatable
 {
-
+    protected  $guard_name = 'api';
     public function profiles()
     {
         return $this->hasOne(Profile::class);
@@ -18,7 +20,7 @@ class User extends Authenticatable
         return $this->hasMany(Demand::class);
     }
 
-    use Notifiable;
+    use Notifiable,HasRoles;
 
     /**
      * The attributes that are mass assignable.

@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {

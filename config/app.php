@@ -167,7 +167,7 @@ return [
          * Package Service Providers...
          */
         Hekmatinasser\Verta\VertaServiceProvider::class,
-
+        Spatie\Permission\PermissionServiceProvider::class,
         /*
          * Application Service Providers...
          */
