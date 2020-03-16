@@ -137,7 +137,8 @@ class UserController extends Controller
            $photo=$request->photo->storeAs('profiles',Str::random(20).".{$ext}",'public');
            $profile->photo_path=$photo;
            $user->profiles()->save($profile);
-           return response()->json(['user'=>new UserResource($user)],200);
+           $isAdmin=$user->id===$request->user()->id?true:false;
+           return response()->json(['user'=>new UserResource($user),'isAdmin'=>$isAdmin],200);
     }
     public function getProfile(Request $request)
     {

@@ -2337,8 +2337,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         axios.post('/api/user/updatePhoto', formData).then(function (res) {
           _this.desserts.data[index].photo = res.data.user.photo;
           _this.editedItem.photo = null;
-
-          _this.setProfile(res.data.user.photo);
+          if (res.data.isAdmin === true) _this.setProfile(res.data.user.photo);
         })["catch"](function (err) {
           console.log(err.response);
         });

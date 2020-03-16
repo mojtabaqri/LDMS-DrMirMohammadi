@@ -218,6 +218,7 @@
                     axios.post('/api/user/updatePhoto',formData).then(res=>{
                        this.desserts.data[index].photo=res.data.user.photo;
                        this.editedItem.photo=null;
+                       if(res.data.isAdmin===true)
                        this.setProfile(res.data.user.photo)
                     }).catch(err=>{
                           console.log(err.response)
