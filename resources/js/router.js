@@ -4,9 +4,17 @@ import Login from './components/LoginComponent'
 import Admin from './components/AdminComponent'
 import Users from './components/AdminComponents/Users'
 import Demands from './components/AdminComponents/Demands'
+import index from './components/HomeComponents/IndexComponent'
 
 Vue.use(VueRouter);
 const routes=[
+
+    {
+        path:'/',
+        name:'index',
+        component:index,
+    }
+    ,
     {
         path:"/admin",
         name:"admin",
