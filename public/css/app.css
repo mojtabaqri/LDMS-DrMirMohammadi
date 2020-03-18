@@ -4647,6 +4647,10 @@
   top: calc(50% - 20px);
   z-index: 1;
 }
+.v-window__prev{
+    position: absolute;
+    right: 0;
+}
 .v-window__prev .v-btn:hover, .v-window__next .v-btn:hover {
   background: none;
 }
@@ -24878,7 +24882,8 @@ html.overflow-y-hidden {
   .v-application .float-print-right {
     float: right !important;
   }
-}@font-face {
+}
+@font-face {
     font-family: 'IranSans';
     src: url('/fonts/IranSans/eot/IRANSansWeb(FaNum)_Light.eot'); /* IE9 Compat Modes */
     src: url('/fonts/IranSans/eot/IRANSansWeb(FaNum)_Light.eot?#iefix') format('embedded-opentype'), 

@@ -5,7 +5,8 @@ import Admin from './components/AdminComponent'
 import Users from './components/AdminComponents/Users'
 import Demands from './components/AdminComponents/Demands'
 import index from './components/HomeComponents/IndexComponent'
-
+import content from "./components/HomeComponents/contentComponent";
+import requestDemand from "./components/HomeComponents/requestDemand";
 Vue.use(VueRouter);
 const routes=[
 
@@ -13,6 +14,19 @@ const routes=[
         path:'/',
         name:'index',
         component:index,
+        children:[
+            {
+                path:"content",
+                component:content,
+                name:'content'
+            },
+            {
+                path:"requestDemand",
+                component:requestDemand,
+                name:'requestDemand'
+            },
+
+        ]
     }
     ,
     {
