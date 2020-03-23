@@ -1,5 +1,5 @@
 <template>
-    <div class="content__spa">
+    <div class="lastest__demand">
 
         <v-row>
             <v-col>
@@ -52,25 +52,15 @@
 
                 </div>
             </v-col>
-        </v-row>
-
-
-    </div>
+        </v-row>    </div>
 </template>
 
 <script>
     export default {
-        name: "contentComponent"
+        name: "latestDemand"
     }
 </script>
 
 <style scoped>
-.itemHodler{
-    display: flex inline;
-    flex-wrap:wrap;
-}
-    .item{
-        padding:0.5rem;
-        margin:0.5rem;
-    }
+
 </style>

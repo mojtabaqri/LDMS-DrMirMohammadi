@@ -7,6 +7,8 @@ import Demands from './components/AdminComponents/Demands'
 import index from './components/HomeComponents/IndexComponent'
 import content from "./components/HomeComponents/contentComponent";
 import requestDemand from "./components/HomeComponents/requestDemand";
+import newReport from "./components/HomeComponents/newReport"
+import lastestDemand from "./components/HomeComponents/latestDemand"
 Vue.use(VueRouter);
 const routes=[
 
@@ -24,6 +26,16 @@ const routes=[
                 path:"requestDemand",
                 component:requestDemand,
                 name:'requestDemand'
+            },
+            {
+                path:"newReport",
+                component:newReport,
+                name:'newReport'
+            },
+            {
+                path:"lastestDemand",
+                component:lastestDemand,
+                name:'lastestDemand'
             },
 
         ]
