@@ -168,6 +168,7 @@ return [
          */
         Hekmatinasser\Verta\VertaServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
         /*
          * Application Service Providers...
          */

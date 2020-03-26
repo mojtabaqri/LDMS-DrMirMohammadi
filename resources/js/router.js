@@ -38,7 +38,9 @@ const routes=[
                 name:'lastestDemand'
             },
 
-        ]
+        ],
+
+
     }
     ,
     {
@@ -75,10 +77,5 @@ const routes=[
 ];
 const router=new VueRouter({
     routes
-});
-router.beforeEach((to,from,next)=>{
-const token=localStorage.getItem('token') || null;
-window.axios.defaults.headers['Authorization'] = 'Bearer '+token;
-next();
 });
 export default router

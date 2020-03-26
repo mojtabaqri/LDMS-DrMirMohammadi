@@ -2754,40 +2754,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "latestDemand"
 });
@@ -2803,6 +2769,74 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3045,7 +3079,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.loading = false;
         return Promise.reject(error);
       });
-      axios.post('/api/login', {
+      axios.post('/login', {
         'email': this.user,
         'password': this.pass
       }).then(function (res) {
@@ -22428,105 +22462,25 @@ var render = function() {
         [
           _c("v-col", [
             _c("div", { staticClass: "itemHodler" }, [
-              _c(
-                "div",
-                { staticClass: "item" },
-                [
-                  _c(
-                    "v-card",
-                    { staticClass: "mx-auto", attrs: { "max-width": "344" } },
-                    [
-                      _c(
-                        "v-list-item",
-                        [
-                          _c("v-list-item-avatar", {
-                            attrs: { color: "grey" }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item-content",
-                            [
-                              _c(
-                                "v-list-item-title",
-                                { staticClass: "headline" },
-                                [_vm._v("Our Changing Planet")]
-                              ),
-                              _vm._v(" "),
-                              _c("v-list-item-subtitle", [
-                                _vm._v("by Kurt Wagner")
-                              ])
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-img", {
-                        attrs: {
-                          src:
-                            "https://cdn.vuetifyjs.com/images/cards/mountain.jpg",
-                          height: "194"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("v-card-text", [
-                        _vm._v(
-                          "\n                            Visit ten places on our planet that are undergoing the biggest changes today.\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "v-card-actions",
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { text: "", color: "deep-purple accent-4" }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                Read\n                            "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { text: "", color: "deep-purple accent-4" }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                Bookmark\n                            "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("v-spacer"),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            { attrs: { icon: "" } },
-                            [_c("v-icon", [_vm._v("mdi-heart")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-btn",
-                            { attrs: { icon: "" } },
-                            [_c("v-icon", [_vm._v("mdi-share-variant")])],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
+              _c("div", { staticClass: "item" }, [
+                _c(
+                  "div",
+                  { staticClass: "text-center" },
+                  [
+                    _c("v-pagination", {
+                      attrs: { length: 5, "total-visible": 5 },
+                      model: {
+                        value: _vm.page,
+                        callback: function($$v) {
+                          _vm.page = $$v
+                        },
+                        expression: "page"
+                      }
+                    })
+                  ],
+                  1
+                )
+              ])
             ])
           ])
         ],
@@ -22558,9 +22512,141 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "new__report" }, [
-    _vm._v("\n\n    this is new report page\n")
-  ])
+  return _c(
+    "div",
+    { staticClass: "new__report" },
+    [
+      _c(
+        "v-container",
+        [
+          _c(
+            "v-row",
+            { staticClass: "align" },
+            [
+              _c(
+                "v-col",
+                { attrs: { cols: "8" } },
+                [
+                  _c("v-file-input", {
+                    attrs: {
+                      color: "deep-purple accent-4",
+                      counter: "",
+                      label: "بارگزاری فایل",
+                      multiple: "",
+                      placeholder: "انتخاب فایل یا سند",
+                      "prepend-icon": "mdi-paperclip",
+                      outlined: "",
+                      "show-size": 1000
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "selection",
+                        fn: function(ref) {
+                          var index = ref.index
+                          var text = ref.text
+                          return [
+                            index < 2
+                              ? _c(
+                                  "v-chip",
+                                  {
+                                    attrs: {
+                                      color: "deep-purple accent-4",
+                                      dark: "",
+                                      label: "",
+                                      small: ""
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                " +
+                                        _vm._s(text) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                )
+                              : index === 2
+                              ? _c(
+                                  "span",
+                                  {
+                                    staticClass:
+                                      "overline grey--text text--darken-3 mx-2"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n    +" +
+                                        _vm._s(_vm.files.length - 2) +
+                                        " File(s)\n  "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.files,
+                      callback: function($$v) {
+                        _vm.files = $$v
+                      },
+                      expression: "files"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-col",
+                { attrs: { cols: "4" } },
+                [
+                  _c(
+                    "v-form",
+                    { ref: "form" },
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "نام شما" },
+                        model: {
+                          value: _vm.name,
+                          callback: function($$v) {
+                            _vm.name = $$v
+                          },
+                          expression: "name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: { label: "شماره همراه ", required: "" }
+                      }),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        attrs: { label: " عنوان گزارش ", required: "" }
+                      }),
+                      _vm._v(" "),
+                      _c("v-textarea", {
+                        attrs: { clearable: "", label: "متن گزارش" }
+                      }),
+                      _vm._v(" "),
+                      _c("v-btn", { staticClass: "mr-4 b" }, [
+                        _vm._v(
+                          "\n                            ارسال مطالبه\n                        "
+                        )
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -81787,11 +81873,6 @@ var routes = [{
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: routes
-});
-router.beforeEach(function (to, from, next) {
-  var token = localStorage.getItem('token') || null;
-  window.axios.defaults.headers['Authorization'] = 'Bearer ' + token;
-  next();
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
 

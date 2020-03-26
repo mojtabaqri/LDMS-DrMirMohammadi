@@ -17,3 +17,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('profiles/{filename}', 'Api\ProfileController@displayImage');
+Route::post('login','Api\AuthController@login');

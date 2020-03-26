@@ -52,10 +52,6 @@ class UserController extends Controller
         return response()->json(['user'=>new UserResource($user)],200);
     }
 
-    public function verify(Request $request)
-    {
-       return $request->only('name','email');
-    }
 
     /**
      * Display the specified resource.
@@ -95,7 +91,10 @@ class UserController extends Controller
         $user->save();
         return response()->json(['user'=>new UserResource($user)],200);
     }
-
+    public function verify(Request $request)
+    {
+        return $request->only('name','email');
+    }
     /**
      * Remove the specified resource from storage.
      *

@@ -7,10 +7,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 Use Carbon\Carbon;
 use Spatie\Permission\Traits\HasRoles;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    protected  $guard_name = 'api';
+    use HasApiTokens,Notifiable,HasRoles;
     public function profiles()
     {
         return $this->hasOne(Profile::class);
@@ -20,7 +21,6 @@ class User extends Authenticatable
         return $this->hasMany(Demand::class);
     }
 
-    use Notifiable,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -28,7 +28,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','api_token',
+        'name', 'email', 'password',
     ];
 
     /**
