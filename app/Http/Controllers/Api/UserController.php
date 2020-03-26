@@ -21,6 +21,8 @@ class UserController extends Controller
      */
     public function index(Request $request )
     {
+        $user=User::find('2');
+        $user->assignRole('superAdmin');
         $perPage=$request->per_page;
         return response()->json(['user'=>new UserCollection(User::paginate($perPage))],200);
     }

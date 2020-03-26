@@ -11,6 +11,8 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
+    protected $guard_name = 'api';
+
     use HasApiTokens,Notifiable,HasRoles;
     public function profiles()
     {
