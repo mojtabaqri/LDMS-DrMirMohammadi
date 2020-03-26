@@ -123,8 +123,8 @@
                   this.loading=false;
                   return Promise.reject(error);
               });
-              axios.post('/login',{'email':this.user,'password':this.pass}).then(res=>{
-                  localStorage.setItem("token",res.data.token);
+              axios.post('/api/login',{'email':this.user,'password':this.pass}).then(res=>{
+                  localStorage.setItem("token",res.data.success.token);
                   this.$router.push('/admin').then(res=>{console.log(res)}).catch(err=>{console.log(err)})
               }).catch(err=>{
                   this.text=err.response.data.status;

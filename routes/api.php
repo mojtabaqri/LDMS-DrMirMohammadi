@@ -21,3 +21,4 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     Route::post('/user/updatePhoto','UserController@updatePhoto');
     Route::post('/user/getProfile','UserController@getProfile');
 });
+Route::post('login','Api\AuthController@login');
