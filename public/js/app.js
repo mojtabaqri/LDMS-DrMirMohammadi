@@ -2048,12 +2048,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     logout: function logout() {
-      localStorage.removeItem('token');
-      this.$router.push('/login').then(function (res) {
-        console.log(res);
-      })["catch"](function (err) {
-        console.log(err);
-      });
+      var _this2 = this;
+
+      axios.post('/api/logout').then(function (res) {
+        localStorage.removeItem('token');
+
+        _this2.$router.push('/login');
+      })["catch"](function (err) {});
     }
   },
   watch: {

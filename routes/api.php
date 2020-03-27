@@ -20,5 +20,6 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     Route::post('/user/delete','UserController@deleteAll');
     Route::post('/user/updatePhoto','UserController@updatePhoto');
     Route::post('/user/getProfile','UserController@getProfile');
+    Route::post('/logout','UserController@logout');
 });
-Route::post('login','Api\AuthController@login');
+Route::post('login','Api\UserController@login');

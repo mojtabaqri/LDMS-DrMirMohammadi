@@ -8,6 +8,8 @@ use App\Profile;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -19,10 +21,25 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function login(Request $request){ //لاگین کاربر
+        $user = User::whereEmail($request->email)->first();
+        //پاس دادن آرایه به متد اعتبار سنجی کاربر
+        if($user && Hash::check($request->password, $user->password)){//اگر کاربر موجود بود و پسورد نیز درست بود توکن را بساز وبه کاربر پاسخ بده
+            $success['token'] =  $user->createToken('tp_@1')-> accessToken;
+            return response()->json(['success' => $success],200);
+        }
+        else{
+            return response()->json(['status'=>'نام کاربری یا رمز عبور صحیح نیست !'], 401);
+        }
+    }
+
+    public function logout(Request $request){
+        auth('api')->user()->token()->revoke();
+    }
+    // خروج کاربر از سیستم
+
     public function index(Request $request )
     {
-        $user=User::find('2');
-        $user->assignRole('superAdmin');
         $perPage=$request->per_page;
         return response()->json(['user'=>new UserCollection(User::paginate($perPage))],200);
     }
@@ -148,4 +165,5 @@ class UserController extends Controller
         $loggedInUser=$request->user()->first();
         return response()->json(['user'=>new UserResource($loggedInUser)],200) ;
     }
+
 }

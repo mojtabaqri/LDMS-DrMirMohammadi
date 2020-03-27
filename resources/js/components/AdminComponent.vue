@@ -130,8 +130,11 @@
                 });
                 },
     logout(){
+        axios.post('/api/logout').then(res=>{
                 localStorage.removeItem('token');
-                this.$router.push('/login').then(res=>{console.log(res)}).catch(err=>{console.log(err)})
+                this.$router.push('/login');
+        }).catch(err=>{
+        });
             }
         },
         watch:{
