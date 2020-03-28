@@ -38,7 +38,7 @@ class UserController extends Controller
     }
     // خروج کاربر از سیستم
 
-    public function index(Request $request )
+    public function index(Request $request ) //جستجو و صفحه بندی کاربران
     {
         $perPage=$request->per_page;
         return response()->json(['user'=>new UserCollection(User::paginate($perPage))],200);

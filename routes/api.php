@@ -21,5 +21,8 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     Route::post('/user/updatePhoto','UserController@updatePhoto');
     Route::post('/user/getProfile','UserController@getProfile');
     Route::post('/logout','UserController@logout');
+    //آغار روت های مربوط به مطالبات کاربران
+    Route::resource('demand','DemandController');
+
 });
 Route::post('login','Api\UserController@login');

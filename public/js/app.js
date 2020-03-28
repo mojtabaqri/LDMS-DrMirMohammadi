@@ -2084,13 +2084,338 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {},
   data: function data() {
-    return {};
+    return {
+      snackbarText: '',
+      selected: [],
+      snackbarColor: '',
+      snackbar: false,
+      loading: false,
+      dialog: false,
+      headers: [{
+        text: ' سریال',
+        align: 'start',
+        sortable: false,
+        value: 'id'
+      }, {
+        text: 'عنوان',
+        value: 'title'
+      }, {
+        text: 'متن مطالبه',
+        value: 'content'
+      }, {
+        text: 'متن پاسخ',
+        value: 'reply'
+      }, {
+        text: 'نام کاربر',
+        value: 'username'
+      }, {
+        text: 'تصویر کاربر',
+        value: 'userprofile'
+      }, {
+        text: 'شماره همراه کاربر',
+        value: 'userphone'
+      }, {
+        text: 'عملیات',
+        value: 'action',
+        sortable: false
+      }],
+      desserts: [],
+      editedIndex: -1,
+      editedItem: {
+        id: '',
+        title: '',
+        content: '',
+        reply: '',
+        username: '',
+        userphone: '',
+        userprofile: null
+      },
+      defaultItem: {
+        id: '',
+        title: '',
+        content: '',
+        reply: '',
+        username: '',
+        userphone: '',
+        userprofile: null
+      }
+    };
   },
-  mounted: function mounted() {},
-  created: function created() {}
+  computed: {
+    formTitle: function formTitle() {
+      return this.editedIndex === -1 ? ' حذف مطالبه' : 'پاسخ به مطالبه  ';
+    }
+  },
+  watch: {
+    dialog: function dialog(val) {
+      val || this.close();
+    }
+  },
+  created: function created() {
+    this.initialize();
+  },
+  methods: {
+    selectAll: function selectAll(e) {
+      this.selected = [];
+
+      if (e.length > 0) {
+        this.selected = e.map(function (val) {
+          return val.id;
+        });
+      }
+    },
+    deleteAll: function deleteAll() {
+      var _this = this;
+
+      var decide = confirm(' آیا برای حذف این آیتم  ها اطمینان دارید؟');
+
+      if (decide) {
+        axios.post('/api/demand/delete', {
+          'demands': this.selected
+        }).then(function (res) {
+          _this.selected.map(function (value) {
+            var index = _this.desserts.data.indexOf(value);
+
+            _this.desserts.data.splice(index, 1);
+          }); //snackbar setting
+
+
+          _this.snackbarColor = 'success';
+          _this.snackbarText = 'این آیتم ها با موفقیت حذف شندند !  ';
+          _this.snackbar = true;
+        })["catch"](function (err) {
+          _this.snackbarColor = 'error';
+          _this.snackbarText = err.response.data.state;
+          _this.snackbar = true;
+        });
+      }
+    },
+    search: function search(e) {
+      var _this2 = this;
+
+      if (e.length > 3) {
+        axios.get('/api/demand/' + e).then(function (res) {
+          _this2.desserts = res.data.demand;
+        })["catch"](function (err) {});
+      } else if (e.length == 0) {
+        axios.get('/api/demand').then(function (res) {
+          _this2.desserts = res.data.demand;
+        })["catch"](function (err) {});
+      }
+    },
+    paginate: function paginate(e) {
+      var _this3 = this;
+
+      var parameters = {
+        'params': {
+          'per_page': e.itemsPerPage
+        }
+      };
+      axios.get('/api/demand?page=' + e.page, parameters).then(function (res) {
+        _this3.desserts = res.data.demand;
+      })["catch"](function (err) {
+        if (err.response.status == 401) {
+          axios.post('/api/logout').then(function (res) {
+            localStorage.removeItem('token');
+
+            _this3.$router.push('/login');
+          })["catch"](function (err) {});
+        }
+      });
+    },
+    initialize: function initialize() {
+      var _this4 = this;
+
+      axios.interceptors.request.use(function (config) {
+        _this4.loading = true;
+        return config;
+      }, function (error) {
+        _this4.loading = false;
+        return Promise.reject(error);
+      });
+      axios.interceptors.response.use(function (response) {
+        _this4.loading = false;
+        return response;
+      }, function (error) {
+        _this4.loading = false;
+        return Promise.reject(error);
+      });
+    },
+    editItem: function editItem(item) {
+      this.editedIndex = this.desserts.data.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem: function deleteItem(item) {
+      var _this5 = this;
+
+      var index = this.desserts.data.indexOf(item);
+      var decide = confirm(' آیا برای حذف این آیتم اطمینان دارید؟');
+
+      if (decide) {
+        axios["delete"]('/api/demand/' + item.id).then(function (res) {
+          _this5.desserts.data.splice(index, 1);
+
+          _this5.snackbarColor = 'error';
+          _this5.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
+          _this5.snackbar = true;
+        })["catch"](function (err) {});
+      }
+    },
+    close: function close() {
+      var _this6 = this;
+
+      this.dialog = false;
+      setTimeout(function () {
+        _this6.editedItem = Object.assign({}, _this6.defaultItem);
+        _this6.editedIndex = -1;
+      }, 300);
+    },
+    save: function save() {
+      var _this7 = this;
+
+      if (this.editedIndex > -1) {
+        axios.put('/api/demand/' + this.editedItem.id, {
+          'demandId': this.editedItem.name,
+          'email': this.editedItem.email
+        }).then(function (res) {
+          _this7.snackbarColor = 'success';
+          _this7.snackbarText = 'ویرایش انجام شد !';
+          _this7.snackbar = true;
+          Object.assign(_this7.desserts.data[_this7.editedIndex], res.data.demand);
+        })["catch"](function (err) {});
+      } else {
+        axios.post('/api/demand', {
+          'name': this.editedItem.name,
+          'email': this.editedItem.email
+        }).then(function (res) {
+          _this7.desserts.data.push(res.data.demand);
+
+          _this7.snackbarColor = 'success';
+          _this7.snackbarText = 'با موفقیت اضافه شد !';
+          _this7.snackbar = true;
+        })["catch"](function (err) {});
+      }
+
+      this.close();
+    }
+  }
 });
 
 /***/ }),
@@ -21711,9 +22036,265 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-alert", { attrs: { type: "error" } }, [
-    _vm._v("\n    This is Demands\n")
-  ])
+  return _c("v-data-table", {
+    staticClass: "elevation-1",
+    attrs: {
+      headers: _vm.headers,
+      items: _vm.desserts.data,
+      "items-per-page": 5,
+      "show-select": "",
+      "footer-props": {
+        itemsPerPageOptions: [5, 10, 15],
+        itemsPerPageText: "نمایش  ",
+        pageText: "مطالبه در این صفحه ",
+        "show-current-page": true,
+        "show-first-last-page": true
+      },
+      "sort-by": "calories",
+      loading: _vm.loading,
+      "loading-text": "اندکی صبر کنید ...."
+    },
+    on: { pagination: _vm.paginate, input: _vm.selectAll },
+    scopedSlots: _vm._u([
+      {
+        key: "top",
+        fn: function() {
+          return [
+            _c(
+              "v-toolbar",
+              { attrs: { flat: "" } },
+              [
+                _c("v-toolbar-title", [_vm._v("مدیریت مطالبات  کاربران ")]),
+                _vm._v(" "),
+                _c("v-divider", {
+                  staticClass: "mx-5 mt-4",
+                  attrs: { inset: "", vertical: "" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "v-col",
+                  { staticClass: "mt-3", attrs: { cols: "3", sm: "3" } },
+                  [
+                    _c("v-text-field", {
+                      attrs: { label: "جستجو..." },
+                      on: { input: _vm.search }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("v-spacer"),
+                _vm._v(" "),
+                _c(
+                  "v-dialog",
+                  {
+                    attrs: { "max-width": "500px" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          return [
+                            _c(
+                              "v-btn",
+                              {
+                                staticClass: "mb-2 mx-2",
+                                attrs: { color: "error", dark: "" },
+                                on: { click: _vm.deleteAll }
+                              },
+                              [_vm._v(" حذف مطالبات")]
+                            )
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.dialog,
+                      callback: function($$v) {
+                        _vm.dialog = $$v
+                      },
+                      expression: "dialog"
+                    }
+                  },
+                  [
+                    _vm._v(" "),
+                    _c(
+                      "v-card",
+                      [
+                        _c("v-card-title", [
+                          _c("span", { staticClass: "headline" }, [
+                            _vm._v(_vm._s(_vm.formTitle))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-text",
+                          [
+                            _c(
+                              "v-container",
+                              [
+                                _c(
+                                  "v-row",
+                                  [
+                                    _c(
+                                      "v-col",
+                                      { attrs: { cols: "12", sm: "12" } },
+                                      [_c("v-form")],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "blue darken-1", text: "" },
+                                on: { click: _vm.close }
+                              },
+                              [_vm._v("انصراف")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "blue darken-1", text: "" },
+                                on: { click: _vm.save }
+                              },
+                              [_vm._v("ذخیره")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-snackbar",
+              {
+                attrs: { left: true, color: _vm.snackbarColor, bottom: true },
+                model: {
+                  value: _vm.snackbar,
+                  callback: function($$v) {
+                    _vm.snackbar = $$v
+                  },
+                  expression: "snackbar"
+                }
+              },
+              [
+                _vm._v(
+                  "\n            " + _vm._s(_vm.snackbarText) + "\n            "
+                ),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { color: "white", text: "" },
+                    on: {
+                      click: function($event) {
+                        _vm.snackbar = false
+                      }
+                    }
+                  },
+                  [_vm._v("\n                بستن\n            ")]
+                )
+              ],
+              1
+            )
+          ]
+        },
+        proxy: true
+      },
+      {
+        key: "item.userprofile",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _c(
+              "v-list-item-avatar",
+              [
+                _c("v-img", {
+                  staticClass: "grey lighten-2",
+                  attrs: {
+                    src: item.userprofile,
+                    "lazy-src": item.userprofile,
+                    "aspect-ratio": "1",
+                    "max-width": "50",
+                    "max-height": "50"
+                  }
+                })
+              ],
+              1
+            )
+          ]
+        }
+      },
+      {
+        key: "item.action",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _c(
+              "v-icon",
+              {
+                staticClass: "mr-2",
+                attrs: { small: "" },
+                on: {
+                  click: function($event) {
+                    return _vm.editItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-pencil\n        ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "v-icon",
+              {
+                attrs: { small: "" },
+                on: {
+                  click: function($event) {
+                    return _vm.deleteItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-delete\n        ")]
+            )
+          ]
+        }
+      },
+      {
+        key: "no-data",
+        fn: function() {
+          return [
+            _c(
+              "v-btn",
+              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
+              [_vm._v("Reset")]
+            )
+          ]
+        },
+        proxy: true
+      }
+    ])
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
