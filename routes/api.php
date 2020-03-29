@@ -22,7 +22,8 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     Route::post('/user/getProfile','UserController@getProfile');
     Route::post('/logout','UserController@logout');
     //آغار روت های مربوط به مطالبات کاربران
-    Route::resource('demand','DemandController');
+    Route::resource('demand','DemandController')->only(['store','index','destroy','update']);
+    Route::post('/demand/delete','DemandController@deleteAll')->name('deleteAllDemand');
 
 });
 Route::post('login','Api\UserController@login');

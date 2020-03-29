@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DemandCollection;
 use App\Http\Resources\DemandResource;
 use App\Http\Resources\UserCollection;
+use App\Reply;
 use Illuminate\Http\Request;
 
 class DemandController extends Controller
@@ -22,16 +23,6 @@ class DemandController extends Controller
         $demands = new DemandCollection(Demand::with(['replies','users'])->paginate($perPage));
         return response()->json(['demand'=>$demands],200);
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -53,17 +44,6 @@ class DemandController extends Controller
     {
 //        $user=User::where('name','like',"%$id%")->paginate();
 //        return response()->json(['user'=>$user],200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -103,13 +83,14 @@ class DemandController extends Controller
     }
     public function deleteAll(Request $request)
     {
-//        if (empty($request->users))
-//            return response()->json(['state'=>'آیتمی برای حذف موجود نیست!'],'403');
-//
-//        if(User::whereIn('id',$request->users)->delete()){
-//            if(Profile::whereIn('user_id',$request->users)->delete()){
-//                return response()->json(['state','ok'],200);
-//            }
-//        }
+    // get All Demands Id that we want to remove them from database
+        if (empty($request->demands))
+            return response()->json(['state'=>'آیتمی برای حذف موجود نیست!'],'403');
+        if(Demand::whereIn('id',$request->demands)->delete()){
+            Reply::whereIn('demand_id',$request->demands)->delete();
+            return response()->json(['state'=>'ok'],200);
+        }
+        return response()->json(['state'=>'حذف ناموفق بود'],200);
     }
 }
+
