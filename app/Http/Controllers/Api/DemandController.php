@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Demand;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DemandCollection;
+use App\Http\Resources\DemandResource;
 use App\Http\Resources\UserCollection;
 use Illuminate\Http\Request;
 
@@ -72,9 +73,22 @@ class DemandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) //متد پاسخ به مطالبه توسط ادمین
     {
-        //
+        //فقط کافیه از طریق متد Put شماره مطالبه و متن پاسخ ادمین رو ارسال کنین !
+        //متد پاسخ دادن به مطالبه
+        $reply=$request->reply;
+        $demand=Demand::find($id);
+        if($demand)
+        {
+            $demand->replies->text=$reply;
+            $demand->replies->admin_id=auth('api')->user()->id;
+            $demand->replies()->save($demand->replies);
+            $demand->updated_at=now();
+            $demand->save();
+            return response()->json(['demand'=>new DemandResource($demand)],200);
+        }
+
     }
 
     /**
