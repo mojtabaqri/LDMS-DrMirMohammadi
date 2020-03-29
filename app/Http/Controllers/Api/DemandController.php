@@ -15,12 +15,11 @@ class DemandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request ) //جستجو و صفحه بندی مطالبه ها
+    public function index(Request $request ) //صفحه بندی مطالبه ها
     {
         $perPage = $request->per_page;
         $demands = new DemandCollection(Demand::with(['replies','users'])->paginate($perPage));
         return response()->json(['demand'=>$demands],200);
-
     }
     /**
      * Show the form for creating a new resource.

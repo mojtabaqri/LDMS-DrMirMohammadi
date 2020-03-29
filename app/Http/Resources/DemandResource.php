@@ -21,7 +21,7 @@ class DemandResource extends JsonResource
             'content'=>$this->content,
             'reply'=>$this->replies != null ? $this->replies->text : 'پاسخ داده نشده!',
             'username'=>$this->users->name,
-            'userphone'=>'09015065145',
+            'userphone'=>$this->users->phone,
             'userprofile'=>$this->users->profiles->photo_path,
             'updated_at'=>Verta::instance($this->updated_at)->format('Y/m/d  |   H:i:s'),
         ];
