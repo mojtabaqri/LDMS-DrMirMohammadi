@@ -79,7 +79,10 @@ class DemandController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(Demand::destroy($id)||Reply::where('demand_id',$id)->delete())
+            return response()->json(['state'=>'ok'],200);
+        return response()->json(['state'=>'حذف ناموفق بود'],403);
+
     }
     public function deleteAll(Request $request)
     {
@@ -90,7 +93,7 @@ class DemandController extends Controller
             Reply::whereIn('demand_id',$request->demands)->delete();
             return response()->json(['state'=>'ok'],200);
         }
-        return response()->json(['state'=>'حذف ناموفق بود'],200);
+        return response()->json(['state'=>'حذف ناموفق بود'],403);
     }
 }
 
