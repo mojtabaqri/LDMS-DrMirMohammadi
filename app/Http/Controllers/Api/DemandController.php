@@ -31,7 +31,14 @@ class DemandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $demand=new Demand(
+            [
+                'title' => $request->title,'content'=>$request->demandContent,'user_id'=>auth('api')->user()->id]
+        );
+        if($demand->save())
+        return response()->json(['demand'=>new DemandResource($demand)],200);
+        return response()->json(['state'=>'false']);
     }
 
     /**
@@ -42,8 +49,8 @@ class DemandController extends Controller
      */
     public function show($id)
     {
-//        $user=User::where('name','like',"%$id%")->paginate();
-//        return response()->json(['user'=>$user],200);
+      $demand=Demand::where('title','like',"%$id%")->paginate();
+      return response()->json(['demand'=>$demand],200);
     }
 
     /**
