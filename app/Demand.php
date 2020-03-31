@@ -17,8 +17,8 @@ class Demand extends Model
     {
         return $this->hasOne(Reply::class);
     }
-    public function files()
+    public function files() //file_directory
     {
-        return $this->hasMany(File::class,'demand_id');
+        return $this->hasOne(File::class,'demand_id');
     }
 }
