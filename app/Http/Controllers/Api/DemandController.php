@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Demand;
+use App\File;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DemandCollection;
 use App\Http\Resources\DemandResource;
 use App\Http\Resources\UserCollection;
 use App\Reply;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use function GuzzleHttp\Promise\all;
 
 class DemandController extends Controller
 {
@@ -23,21 +27,45 @@ class DemandController extends Controller
         $demands = new DemandCollection(Demand::with(['replies','users'])->paginate($perPage));
         return response()->json(['demand'=>$demands],200);
     }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
-
-        $demand=new Demand(
-            [
-                'title' => $request->title,'content'=>$request->demandContent,'user_id'=>auth('api')->user()->id]
-        );
-        if($demand->save())
-        return response()->json(['demand'=>new DemandResource($demand)],200);
+        // دریافت دایرکتوری مطالبه مربوطه :  $demand=Demand::find(72)->files->first()->file_directoryس
+        //{"title":"this is test title","demandContent":"this is test content "} send as form-data request
+        //------------------------------------------- Valid Uploaded File ---------------------------------
+        $rules = [
+            'file'  => 'required',
+            'file.*' => 'required|file|mimes:doc,pdf,docx,zip,jpg,jpeg,rar',
+        ];
+        $error = Validator::make($request->all(), $rules);
+        if($error->fails())
+            return response()->json(['errors' => $error->errors()->all()]);
+        //-------------------------------------------- Valid Uploaded File -------------------------------
+        $request->data=json_decode($request->data); //دریافت به صورت جیسون و تبدیل به شی
+        $demand=new Demand(['title' => $request->data->title,'content'=>$request->data->demandContent,'user_id'=>auth('api')->user()->id]);
+        if($demand->save()) //اگر درخواست در دیتابیس قبت شد
+        {
+            //----------------------------File Upload Scope---------------------------------------
+            if($request->hasfile('file'))
+            {
+                $path='public/demands/'.$demand->id.'/files';
+                foreach($request->file('file') as $file)
+                {
+                    $filename=$file->getClientOriginalName();
+                    $file->move($path, $filename);
+                }
+                $demand->files()->save(new File(['file_directory'=>$path]));
+            }
+            //----------------------------File Upload Scope---------------------------------------
+            return response()->json(['demand'=>new DemandResource($demand)],200);
+        }
         return response()->json(['state'=>'false']);
     }
 

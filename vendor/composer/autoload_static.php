@@ -540,6 +540,7 @@ class ComposerStaticInit9480d5b7578bf56c1871baad14e4eed5
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Demand' => __DIR__ . '/../..' . '/app/Demand.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\File' => __DIR__ . '/../..' . '/app/File.php',
         'App\\Http\\Controllers\\Api\\DemandController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/DemandController.php',
         'App\\Http\\Controllers\\Api\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/ProfileController.php',
         'App\\Http\\Controllers\\Api\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/UserController.php',

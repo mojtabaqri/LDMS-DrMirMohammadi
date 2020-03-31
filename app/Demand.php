@@ -17,4 +17,8 @@ class Demand extends Model
     {
         return $this->hasOne(Reply::class);
     }
+    public function files()
+    {
+        return $this->hasMany(File::class,'demand_id');
+    }
 }
