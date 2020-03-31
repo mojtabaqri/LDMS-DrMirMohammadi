@@ -55,13 +55,13 @@ class DemandController extends Controller
             //----------------------------File Upload Scope---------------------------------------
             if($request->hasfile('file'))
             {
-                $path='public/demands/'.$demand->id.'/files';
+                $path='demands/'.$demand->id.'/files/';
                 foreach($request->file('file') as $file)
                 {
                     $filename=$file->getClientOriginalName();
-                    $file->move($path, $filename);
+                    Storage::putFileAs($path,$file,$filename);
                 }
-                $demand->files()->save(new File(['file_directory'=>$path]));
+                    $demand->files()->save(new File(['file_directory'=>$path]));
             }
             //----------------------------File Upload Scope---------------------------------------
             return response()->json(['demand'=>new DemandResource($demand)],200);
