@@ -49,7 +49,7 @@ class DemandController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         //-------------------------------------------- Valid Uploaded File -------------------------------
         $request->data=json_decode($request->data); //دریافت به صورت جیسون و تبدیل به شی
-        $demand=new Demand(['title' => $request->data->title,'tracking'=>rand(387262,1032  266),'content'=>$request->data->demandContent,'user_id'=>auth('api')->user()->id]);
+        $demand=new Demand(['title' => $request->data->title,'tracking'=>rand(38722,102266).rand(1321,2163),'content'=>$request->data->demandContent,'user_id'=>auth('api')->user()->id]);
         if($demand->save()) //اگر درخواست در دیتابیس قبت شد
         {
             //----------------------------File Upload Scope---------------------------------------
@@ -129,6 +129,12 @@ class DemandController extends Controller
             return response()->json(['state'=>'ok'],200);
         }
         return response()->json(['state'=>'حذف ناموفق بود'],403);
+    }
+    public function trackingDemand($id){
+        $demand=Demand::where('tracking',$id)->first();
+        if($demand)
+            return response()->json(['demand'=>new DemandResource($demand)],200);
+        return response()->json(['state'=>'یافت نشد!'],200);
     }
 }
 

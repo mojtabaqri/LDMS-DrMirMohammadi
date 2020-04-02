@@ -24,6 +24,7 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     //آغار روت های مربوط به مطالبات کاربران
     Route::resource('demand','DemandController')->only(['store','index','destroy','update','show']);
     Route::post('/demand/delete','DemandController@deleteAll')->name('deleteAllDemand');
+    Route::get('/demand/tracking/{id}','DemandController@trackingDemand')->name('trackingDemand');
 
 });
 Route::post('login','Api\UserController@login');
