@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Demand extends Model
 {
     protected $fillable = [
-       'id','title','content','user_id', 'state',
+       'id','title','content','user_id', 'state','tracking',
     ];
     public function users()
     {
