@@ -23,6 +23,11 @@ class User extends Authenticatable
         return $this->hasMany(Demand::class);
     }
 
+    public function mobileTokens()
+    {
+        return $this->hasMany(MobileToken::class);
+    }
+
 
     /**
      * The attributes that are mass assignable.
@@ -30,7 +35,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','phone',
+        'name', 'email', 'password','phone','mobile_verified_at',
     ];
 
     /**

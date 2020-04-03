@@ -32,6 +32,7 @@ return array(
     'App\\Http\\Resources\\DemandResource' => $baseDir . '/app/Http/Resources/DemandResource.php',
     'App\\Http\\Resources\\User' => $baseDir . '/app/Http/Resources/User.php',
     'App\\Http\\Resources\\UserCollection' => $baseDir . '/app/Http/Resources/UserCollection.php',
+    'App\\MobileToken' => $baseDir . '/app/MobileToken.php',
     'App\\Profile' => $baseDir . '/app/Profile.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',

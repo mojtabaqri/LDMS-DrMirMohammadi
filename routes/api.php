@@ -16,10 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     Route::get('/verify','UserController@verify');
     Route::resource('user','UserController');
-    Route::post('/user/verifyEmail','UserController@verifyEmail');
-    Route::post('/user/delete','UserController@deleteAll');
-    Route::post('/user/updatePhoto','UserController@updatePhoto');
-    Route::post('/user/getProfile','UserController@getProfile');
+    Route::Post('/user/mobileVerify','UserController@mobileVerify')->name('mobileVerify');
+    Route::post('/user/verifyEmail','UserController@verifyEmail')->name('veriflyEmail');
+    Route::post('/user/delete','UserController@deleteAll')->name('deleteAllUser');
+    Route::post('/user/updatePhoto','UserController@updatePhoto')->name('updatePhoto');
+    Route::post('/user/getProfile','UserController@getProfile')->name('getPhotos');
     Route::post('/logout','UserController@logout');
     //آغار روت های مربوط به مطالبات کاربران
     Route::resource('demand','DemandController')->only(['store','index','destroy','update','show']);

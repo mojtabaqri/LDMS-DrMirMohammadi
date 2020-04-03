@@ -563,6 +563,7 @@ class ComposerStaticInit9480d5b7578bf56c1871baad14e4eed5
         'App\\Http\\Resources\\DemandResource' => __DIR__ . '/../..' . '/app/Http/Resources/DemandResource.php',
         'App\\Http\\Resources\\User' => __DIR__ . '/../..' . '/app/Http/Resources/User.php',
         'App\\Http\\Resources\\UserCollection' => __DIR__ . '/../..' . '/app/Http/Resources/UserCollection.php',
+        'App\\MobileToken' => __DIR__ . '/../..' . '/app/MobileToken.php',
         'App\\Profile' => __DIR__ . '/../..' . '/app/Profile.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',

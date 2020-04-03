@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Library\TokenManager;
 use App\Http\Resources\UserCollection;
+use App\MobileToken;
 use App\Profile;
 use Illuminate\Http\Request;
 use App\User;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
@@ -165,5 +168,52 @@ class UserController extends Controller
         $loggedInUser=$request->user()->first();
         return response()->json(['user'=>new UserResource($loggedInUser)],200) ;
     }
+    public function mobileVerify(Request $request)
+    {
+        //اگر موبایل کاربر قلا تایید نشده بود --------------------------------------
+        $user=User::find(\auth('api')->user()->id);
+        if($user->first()->mobile_verified_at)
+            return response()->json(['msg'=>'کاربر قبلا احراز هویت را انجام داده است'],200);
+        // اگر احراز هویت نشده بود چک کن ببین قبلا احراز هویت را انجام داده یا نه
+        $lastUserToken = MobileToken::where('user_id',$user->id)->first();
+        if(($lastUserToken )&&($lastUserToken->first()->revoke!=1) )
+        {//اگر زمانش نگذشته بود چک کن ببین کد وارد شده با توکن برابره یا نه اگه برابر هست موبایل رو وریفای کن
+            if($lastUserToken->first()->expired <Carbon::now())
+            {
+                $lastUserToken->revoke=1;
+                $lastUserToken->save();
+                return response()->json(['msg'=>'کد منقضی شده است!'],200);
+            }
+            if ($lastUserToken->token==$request->code)
+            {
+                $upateUserVerify=User::find($user->id);
+                $upateUserVerify->mobile_verified_at=now();
+                $upateUserVerify->save();
+                $msg='حساب شما با موفقیت تایید شد';
+            }
+            else{
+                $msg= 'کد اشتباه میباشد ';
+            }
+            $lastUserToken->revoke=1;
+            $lastUserToken->save();
+            return response()->json(['msg'=>$msg],200);
+        }
+        else{
+            $msg='کد به تلفن همراه شما ارسال شد ! 60 ثانیه فرصت دارید تا حساب کاربری خود را فعال نمایید!';
+            //اگر قبلا احراز هویت را انجام نداده بود
+            $randomToken=rand(1059,4506);
+            $token=new MobileToken();
+            $token->user_id=auth('api')->user()->id;
+            $token->created=now();
+            $token->expired=now()->addSeconds(60);
+            $token->token=$randomToken;
+            $token->save();
+            return response()->json(['msg'=>$msg],200);
+
+        }
+    }
+
+
+
 
 }
