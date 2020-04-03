@@ -12,6 +12,7 @@ use App\User;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -73,7 +74,24 @@ class UserController extends Controller
         $user->profiles()->save(new Profile());
         return response()->json(['user'=>new UserResource($user)],200);
     }
-
+    public function register(Request $request)
+    {
+        $rules = [
+            'name'  => 'required|string',
+            'password'  => 'required|min:8',
+            'email' => 'required|email|unique:users',
+        ];
+        $error = Validator::make($request->all(), $rules);
+        if($error->fails())
+            return response()->json(['errors' => $error->errors()->all()]);
+        $user=new User(
+            [
+                'name' => $request->name,'email'=>$request->email,'password'=>bcrypt($request->password)]
+        );
+        $user->save();
+        $user->profiles()->save(new Profile());
+        return response()->json(['user'=>new UserResource($user)],200);
+    }
 
     /**
      * Display the specified resource.
