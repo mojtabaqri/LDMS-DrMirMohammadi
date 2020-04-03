@@ -23,7 +23,7 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     Route::post('/user/getProfile','UserController@getProfile')->name('getPhotos');
     Route::post('/logout','UserController@logout');
     //آغار روت های مربوط به مطالبات کاربران
-    Route::resource('demand','DemandController')->only(['store','index','destroy','update','show']);
+    Route::resource('demand','DemandController')->only(['store','index','destroy','update','show'])->middleware('phoneVerify');
     Route::post('/demand/delete','DemandController@deleteAll')->name('deleteAllDemand');
     Route::get('/demand/tracking/{id}','DemandController@trackingDemand')->name('trackingDemand');
 
