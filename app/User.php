@@ -14,6 +14,12 @@ class User extends Authenticatable
     protected $guard_name = 'api';
 
     use HasApiTokens,Notifiable,HasRoles;
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
     public function profiles()
     {
         return $this->hasOne(Profile::class);
