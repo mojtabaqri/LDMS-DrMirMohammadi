@@ -60,9 +60,10 @@
                                     />
                                 </v-form>
                             </v-card-text>
-                            <v-card-actions>
-                                <v-spacer />
-                                <v-btn :disabled="!valid" color="primary" @click.prevent="login">ورود</v-btn>
+                            <v-card-actions class="d-inline-flex">
+                                    <v-btn  :disabled="!valid" color="primary" @click.prevent="login">ورود</v-btn>
+                                <router-link to="register" class="mr-4">                                     حساب کاربری ندارید ؟ ثبت نام کنید!
+                                </router-link>
                             </v-card-actions>
                         </v-card>
                         <v-snackbar
@@ -132,9 +133,6 @@
               });
           }
         },
-        mounted() {
-            console.log('login Component mounted.')
-        }
     }
 </script>
 <style scoped>

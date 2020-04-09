@@ -81,16 +81,27 @@ class UserController extends Controller
             'password'  => 'required|min:8',
             'email' => 'required|email|unique:users',
         ];
-        $error = Validator::make($request->all(), $rules);
+        $message = [
+            'name.required'  => 'ورود نام الزامی است !',
+            'name.string'  => 'نام باید به صورت متن باشد ورود اعداد غیر مجاز است!',
+            'password.required'  => 'پسورد را وارد کنید',
+            'password.min'  => 'حداثل طول پسورد باید 8 رقم باشد ',
+            'email.required' => 'ورود ایمیل الزامی است!',
+            'email.email' => 'فرمت ایمیل صحیح نیست !',
+            'email.unique' => 'ایمیل تکراری است !',
+        ];
+        $error = Validator::make($request->all(), $rules,$message);
         if($error->fails())
-            return response()->json(['errors' => $error->errors()->all()]);
+            return response()->json(['status' => $error->errors()->first()]);
         $user=new User(
             [
                 'name' => $request->name,'email'=>$request->email,'password'=>bcrypt($request->password)]
         );
-        $user->save();
-        $user->profiles()->save(new Profile());
-        return response()->json(['user'=>new UserResource($user)],200);
+        if($user->save()){
+            $user->profiles()->save(new Profile());
+            return response()->json(['status'=>'با موفقیت ثبت نام کردید ! هم اکنون میتوانید برای ورود اقدام کنید!'],200);
+        }
+
     }
 
     /**
