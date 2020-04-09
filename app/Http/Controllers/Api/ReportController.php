@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\File;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReportCollection;
 use App\Report;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,9 +18,11 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->per_page;
+        $reports = new ReportCollection(Report::with('users')->paginate($perPage));
+        return response()->json(['report'=>$reports],200);
     }
 
     /**
@@ -77,7 +81,8 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        //
+        $report=Report::where('title','like',"%$id%")->paginate();
+        return response()->json(['report'=>$report],200);
     }
 
     /**
@@ -100,7 +105,7 @@ class ReportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
@@ -111,6 +116,16 @@ class ReportController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(Report::destroy($id))
+            return response()->json(['state'=>'با موفقیت حذف شد'],200);
+        return response()->json(['state'=>'حذف ناموفق بود'],403);
     }
-}
+    public function deleteAll(Request $request)
+    {
+        // get All Demands Id that we want to remove them from database
+        if (empty($request->reports))
+            return response()->json(['state'=>'آیتمی برای حذف موجود نیست!'],'403');
+        if(Report::whereIn('id',$request->reports)->delete())
+            return response()->json(['state'=>'ok'],200);
+        return response()->json(['state'=>'حذف ناموفق بود'],403);
+    }}

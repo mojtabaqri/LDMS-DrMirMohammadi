@@ -28,6 +28,7 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
     Route::get('/demand/tracking/{id}','DemandController@trackingDemand')->name('trackingDemand');
 //روت مخصوص گزارشات
     Route::resource('report','ReportController')->only(['store','index','destroy','update','show'])->middleware('phoneVerify');
+    Route::post('/report/delete','ReportController@deleteAll')->name('deleteAllReport');
 });
 Route::post('login','Api\UserController@login');
 Route::post('register','Api\UserController@register');
