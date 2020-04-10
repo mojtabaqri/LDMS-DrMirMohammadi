@@ -29,7 +29,7 @@ class UserController extends Controller
         $user = User::whereEmail($request->email)->first();
         //پاس دادن آرایه به متد اعتبار سنجی کاربر
         if($user && Hash::check($request->password, $user->password)){//اگر کاربر موجود بود و پسورد نیز درست بود توکن را بساز وبه کاربر پاسخ بده
-            $success['token'] =  $user->createToken('tp_@1')-> accessToken;
+            $success['token'] =  $user->createToken('tp_'.$user->id)-> accessToken;
             return response()->json(['success' => $success],200);
         }
         else{
@@ -202,7 +202,7 @@ class UserController extends Controller
         $errCode=403;
         //اگر موبایل کاربر قلا تایید نشده بود --------------------------------------
         $user=User::find(\auth('api')->user()->id);
-        if($user->first()->mobile_verified_at)
+        if($user->mobile_verified_at)
             return response()->json(['msg'=>'کاربر قبلا احراز هویت را انجام داده است'],403);
         // اگر احراز هویت نشده بود چک کن ببین قبلا احراز هویت را انجام داده یا نه
         $lastUserToken = MobileToken::where('user_id',$user->id)->first();
@@ -232,6 +232,7 @@ class UserController extends Controller
         }
         else{
             $msg='کد به تلفن همراه شما ارسال شد ! 60 ثانیه فرصت دارید تا حساب کاربری خود را فعال نمایید!';
+            $errCode=200;
             //اگر قبلا احراز هویت را انجام نداده بود
             $randomToken=rand(1059,4506);
             $token=new MobileToken();

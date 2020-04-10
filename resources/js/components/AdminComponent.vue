@@ -117,6 +117,7 @@
             items: [
                 { icon: 'mdi-account-group-outline', text: '  مدیریت کاربران ' ,link:'users'},
                 { icon: 'mdi-account-badge-outline', text: 'آخرین مطالبات ثبت شده ' ,link:'demands'},
+                { icon: 'mdi-checkbox-marked-circle-outline', text: 'تایید حساب کاربری' ,link:'verify'},
 
             ],
 
