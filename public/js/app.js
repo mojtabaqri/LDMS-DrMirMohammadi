@@ -82877,11 +82877,19 @@ var routes = [{
 }, {
   path: "/login",
   name: "login",
-  component: _components_LoginComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
+  component: _components_LoginComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    var token = localStorage.getItem('token');
+    if (token) next('/admin');else next();
+  }
 }, {
   path: "/register",
   name: "register",
-  component: _components_RegisterComponent__WEBPACK_IMPORTED_MODULE_3__["default"]
+  component: _components_RegisterComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    var token = localStorage.getItem('token');
+    if (token) next('/admin');else next();
+  }
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: routes

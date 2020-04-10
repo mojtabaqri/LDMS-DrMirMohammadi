@@ -73,12 +73,26 @@ const routes=[
         path:"/login",
         name:"login",
         component:Login,
+        beforeEnter (to, from, next) {
+            let token=localStorage.getItem('token');
+            if (token)
+                next('/admin')
+            else
+                next()
+        }
 
     },
     {
         path:"/register",
         name:"register",
         component:Register,
+        beforeEnter (to, from, next) {
+            let token=localStorage.getItem('token');
+            if (token)
+            next('/admin')
+            else
+                next()
+        }
 
     },
 ];
