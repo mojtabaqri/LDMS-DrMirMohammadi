@@ -2,6 +2,7 @@ import Vue from  'vue';
 import VueRouter from 'vue-router';
 import Login from './components/LoginComponent'
 import Register from './components/RegisterComponent'
+import Verify from './components/VerifyComponent'
 import Admin from './components/AdminComponent'
 import Users from './components/AdminComponents/Users'
 import Demands from './components/AdminComponents/Demands'
@@ -94,6 +95,11 @@ const routes=[
                 next()
         }
 
+    },
+    {
+        path:"/verify",
+        name:"verify",
+        component:Verify,
     },
 ];
 const router=new VueRouter({

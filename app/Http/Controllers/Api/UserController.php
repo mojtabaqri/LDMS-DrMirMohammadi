@@ -199,10 +199,11 @@ class UserController extends Controller
     }
     public function mobileVerify(Request $request)
     {
+        $errCode=403;
         //اگر موبایل کاربر قلا تایید نشده بود --------------------------------------
         $user=User::find(\auth('api')->user()->id);
         if($user->first()->mobile_verified_at)
-            return response()->json(['msg'=>'کاربر قبلا احراز هویت را انجام داده است'],200);
+            return response()->json(['msg'=>'کاربر قبلا احراز هویت را انجام داده است'],403);
         // اگر احراز هویت نشده بود چک کن ببین قبلا احراز هویت را انجام داده یا نه
         $lastUserToken = MobileToken::where('user_id',$user->id)->first();
         if(($lastUserToken )&&($lastUserToken->first()->revoke!=1) )
@@ -211,7 +212,7 @@ class UserController extends Controller
             {
                 $lastUserToken->revoke=1;
                 $lastUserToken->save();
-                return response()->json(['msg'=>'کد منقضی شده است!'],200);
+                return response()->json(['msg'=>'کد منقضی شده است!'],403);
             }
             if ($lastUserToken->token==$request->code)
             {
@@ -219,8 +220,10 @@ class UserController extends Controller
                 $upateUserVerify->mobile_verified_at=now();
                 $upateUserVerify->save();
                 $msg='حساب شما با موفقیت تایید شد';
+                $errCode=200;
             }
             else{
+                $errCode=403;
                 $msg= 'کد اشتباه میباشد ';
             }
             $lastUserToken->revoke=1;
@@ -237,7 +240,7 @@ class UserController extends Controller
             $token->expired=now()->addSeconds(60);
             $token->token=$randomToken;
             $token->save();
-            return response()->json(['msg'=>$msg],200);
+            return response()->json(['msg'=>$msg],$errCode);
 
         }
     }
