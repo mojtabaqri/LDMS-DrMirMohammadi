@@ -30,6 +30,7 @@ class UserController extends Controller
         //پاس دادن آرایه به متد اعتبار سنجی کاربر
         if($user && Hash::check($request->password, $user->password)){//اگر کاربر موجود بود و پسورد نیز درست بود توکن را بساز وبه کاربر پاسخ بده
             $success['token'] =  $user->createToken('tp_'.$user->id)-> accessToken;
+            $success['logLevel'] =md5($user->getRoleNames()->first());
             return response()->json(['success' => $success],200);
         }
         else{
@@ -97,6 +98,7 @@ class UserController extends Controller
             [
                 'name' => $request->name,'email'=>$request->email,'password'=>bcrypt($request->password)]
         );
+        $user->assignRole('normal');
         if($user->save()){
             $user->profiles()->save(new Profile());
             return response()->json(['status'=>'با موفقیت ثبت نام کردید ! هم اکنون میتوانید برای ورود اقدام کنید!'],200);

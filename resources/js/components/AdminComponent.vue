@@ -96,6 +96,7 @@
 
 <script>
     import {mapState} from  'vuex'
+    import {mapGetters} from  'vuex'
     export default {
 
         props: {
@@ -104,7 +105,10 @@
         computed:{
          ...mapState([
            'pic'
-         ])
+         ]),
+            ...mapGetters([
+                'items'
+            ])
         },
         created(){
          this.$vuetify.theme.dark=true;
@@ -114,13 +118,6 @@
             photo:'',
             theme:true,
             drawer: null,
-            items: [
-                { icon: 'mdi-account-group-outline', text: '  مدیریت کاربران ' ,link:'users'},
-                { icon: 'mdi-account-badge-outline', text: 'آخرین مطالبات ثبت شده ' ,link:'demands'},
-                { icon: 'mdi-checkbox-marked-circle-outline', text: 'تایید حساب کاربری' ,link:'verify'},
-
-            ],
-
         }),
         methods:{
             initialize(){
@@ -133,6 +130,7 @@
     logout(){
         axios.post('/api/logout').then(res=>{
                 localStorage.removeItem('token');
+                localStorage.removeItem('loggedLevel');
                 this.$router.push('/login');
         }).catch(err=>{
         });
@@ -145,6 +143,7 @@
             pic:function (oldVal,newVal) {
                 this.photo=oldVal;
             },
+
 
         }
 
