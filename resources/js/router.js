@@ -53,8 +53,18 @@ const routes=[
             {
                 path:"users",
                 component:Users,
-                name:'users'
-            },
+                name:'users',
+                beforeEnter:(to,from,next)=> {
+                 let loggedLevel=localStorage.getItem('loggedLevel');
+                 if(loggedLevel==="83eebac535d14f791f6ee4dbefe689dc")
+                 {
+                     next();
+                 }
+                 else {
+                     next('/admin')
+                 }
+                }
+                },
             {
                 path:"demands",
                 component:Demands,

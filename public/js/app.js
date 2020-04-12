@@ -89820,7 +89820,16 @@ var routes = [{
   children: [{
     path: "users",
     component: _components_AdminComponents_Users__WEBPACK_IMPORTED_MODULE_6__["default"],
-    name: 'users'
+    name: 'users',
+    beforeEnter: function beforeEnter(to, from, next) {
+      var loggedLevel = localStorage.getItem('loggedLevel');
+
+      if (loggedLevel === "83eebac535d14f791f6ee4dbefe689dc") {
+        next();
+      } else {
+        next('/admin');
+      }
+    }
   }, {
     path: "demands",
     component: _components_AdminComponents_Demands__WEBPACK_IMPORTED_MODULE_7__["default"],
