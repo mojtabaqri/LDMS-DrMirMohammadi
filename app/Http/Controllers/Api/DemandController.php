@@ -7,6 +7,7 @@ use App\File;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DemandCollection;
 use App\Http\Resources\DemandResource;
+use App\Http\Resources\singleDemandResource;
 use App\Http\Resources\UserCollection;
 use App\Reply;
 use Illuminate\Http\Request;
@@ -50,6 +51,7 @@ class DemandController extends Controller
         //-------------------------------------------- Valid Uploaded File -------------------------------
         $request->data=json_decode($request->data); //دریافت به صورت جیسون و تبدیل به شی
         $demand=new Demand(['title' => $request->data->title,'tracking'=>rand(38722,102266).rand(1321,2163),'content'=>$request->data->demandContent,'user_id'=>auth('api')->user()->id]);
+        $path='demands/'.$demand->id.'/files/';
         if($demand->save()) //اگر درخواست در دیتابیس قبت شد
         {
             //----------------------------File Upload Scope---------------------------------------
@@ -61,7 +63,8 @@ class DemandController extends Controller
                     $filename=$file->getClientOriginalName();
                     Storage::putFileAs($path,$file,$filename);
                 }
-                    $demand->files()->save(new File(['file_directory'=>$path]));
+                    $demand->file_directory=$path;
+                    $demand->save();
             }
             //----------------------------File Upload Scope---------------------------------------
             return response()->json(['tracking'=>$demand->tracking],200);
@@ -136,5 +139,13 @@ class DemandController extends Controller
             return response()->json(['demand'=>new DemandResource($demand)],200);
         return response()->json(['state'=>'یافت نشد!'],200);
     }
+
+    public function singleDemand($id) // Show Single Demand with files
+    {
+        $demand=Demand::find($id);
+        if($demand){
+            return new singleDemandResource($demand->with(['replies','users']));
+        }
+     }
 }
 

@@ -35,27 +35,49 @@
                 </v-col>
                 <v-spacer></v-spacer>
 
-                <v-dialog v-model="dialog" max-width="500px">
+                <v-dialog v-model="dialog" max-width="800px">
                     <template v-slot:activator="{ on }">
                         <v-btn color="error" dark class="mb-2 mx-2" v-on:click="deleteAll"> حذف مطالبات</v-btn>
                     </template>
 
                     <v-card>
                         <v-card-title>
-                            <span class="headline">{{ formTitle }}</span>
+                            <span class="title">{{ formTitle }}</span>
                         </v-card-title>
 
                         <v-card-text>
                             <v-container>
-                                <v-row>
-                                    <v-col cols="12" sm="12">
-                                        <v-form
-                                        >
-                                        </v-form>
-                                    </v-col>
+                                    <v-form>
+                                        <v-row>
+                                            <v-col cols="8" class="offset-4">
+                                                <v-text-field
+                                                    label="عنوان مطالبه"
+                                                    readonly
+                                                    ></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" class=" p-3 mt-2 ">
+                                                <v-textarea
+                                                    name="input-7-1"
+                                                    filled
+                                                    label="متن مطالبه"
+                                                    readonly
+                                                    :value="demandContent"
+                                                ></v-textarea>
+                                            </v-col>
+                                            <v-col cols="12" class=" p-3 mt-2">
+                                             <attach-file-component :file_directory=filesObject></attach-file-component>
+                                            </v-col>
+                                            <v-col cols="12" class=" p-3 mt-2 white">
+                                                <vue-editor v-model="replyContent" />
+                                            </v-col>
+
+                                        </v-row>
+
+                                    </v-form>
 
 
-                                </v-row>
+
+
                             </v-container>
                         </v-card-text>
 
@@ -102,8 +124,7 @@
                 class="mr-2"
                 @click="editItem(item)"
             >
-                mdi-pencil
-            </v-icon>
+                mdi-file-document-box-search           </v-icon>
             <v-icon
                 small
                 @click="deleteItem(item)"
@@ -119,8 +140,30 @@
 </template>
 
 <script>
+    import attachFileComponent from "../customComponent/attachFileComponent";
     export default {
+        components:{
+          'attachFileComponent':attachFileComponent
+        },
         data: () => ({
+            demandContent:'بدون متن',
+            replyContent:'بدون پاسخ',
+            filesObject:[
+                {
+                    'address':'http://sadasdasdasdasdadasdsad',
+                    'ext':'name.png'
+                },
+                {
+                    'address':'http://sadasdasdasdasdadasdsad',
+                    'ext':'test.jpg'
+
+                },
+                {
+                    'address':'http://sadasdasdasdasdadasdsad',
+                    'ext':'fuke.docx'
+
+                },
+            ],
             snackbarText:'',
             selected:[],
             snackbarColor:'',
@@ -166,7 +209,7 @@
         }),
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? ' حذف مطالبه' : 'پاسخ به مطالبه  '
+                return this.editedIndex === -1 ? ' حذف مطالبه' : 'مشاهده مطالبه:  '+this.editedItem.title
             },
         },
         watch: {

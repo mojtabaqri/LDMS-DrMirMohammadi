@@ -127,7 +127,7 @@
               axios.post('/api/login',{'email':this.user,'password':this.pass}).then(res=>{
                   localStorage.setItem("token",res.data.success.token);
                   localStorage.setItem("loggedLevel",res.data.success.logLevel);
-                  this.$router.push('/admin').then(res=>{console.log(res)}).catch(err=>{console.log(err)})
+                  this.$router.push('/panel').then(res=>{console.log(res)}).catch(err=>{console.log(err)})
               }).catch(err=>{
                   this.text=err.response.data.status;
                   this.snackbar=true;

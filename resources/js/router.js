@@ -46,7 +46,7 @@ const routes=[
     }
     ,
     {
-        path:"/admin",
+        path:"/panel",
         name:"admin",
         component:Admin,
         children:[
@@ -61,14 +61,24 @@ const routes=[
                      next();
                  }
                  else {
-                     next('/admin')
+                     next('/panel')
                  }
                 }
                 },
             {
                 path:"demands",
                 component:Demands,
-                name:'demands'
+                name:'demands',
+                beforeEnter:(to,from,next)=> {
+                    let loggedLevel=localStorage.getItem('loggedLevel');
+                    if((loggedLevel==="83eebac535d14f791f6ee4dbefe689dc")|| loggedLevel==="21232f297a57a5a743894a0e4a801fc3")
+                    {
+                        next();
+                    }
+                    else {
+                        next('/panel')
+                    }
+                }
             },
             {
                 path:"verify",
@@ -92,7 +102,7 @@ const routes=[
         beforeEnter (to, from, next) {
             let token=localStorage.getItem('token');
             if (token)
-                next('/admin')
+                next('/panel')
             else
                 next()
         }
@@ -105,7 +115,7 @@ const routes=[
         beforeEnter (to, from, next) {
             let token=localStorage.getItem('token');
             if (token)
-            next('/admin')
+            next('/panel')
             else
                 next()
         }
