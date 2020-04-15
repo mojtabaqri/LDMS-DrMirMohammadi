@@ -3691,8 +3691,9 @@ __webpack_require__.r(__webpack_exports__);
     downloadItem: function downloadItem(item) {
       axios.post('/api/downloadFile', {
         'file': item
+      }, {
+        responseType: 'blob'
       }).then(function (res) {
-        console.log(res);
         var blob = new Blob([res.data], {
           type: res.headers['content-type']
         });

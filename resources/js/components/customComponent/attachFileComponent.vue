@@ -31,8 +31,7 @@
         },
         methods:{
             downloadItem(item){
-              axios.post('/api/downloadFile',{'file':item}).then(res=>{
-                  console.log(res)
+              axios.post('/api/downloadFile',{'file':item},{responseType: 'blob'}).then(res=>{
                   let blob = new Blob([res.data], { type: res.headers['content-type'] });
                   let link = document.createElement('a');
                   link.href = window.URL.createObjectURL(blob);
