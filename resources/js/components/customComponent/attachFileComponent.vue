@@ -32,7 +32,12 @@
         methods:{
             downloadItem(item){
               axios.post('/api/downloadFile',{'file':item}).then(res=>{
-                  console.log(res.data)
+                  console.log(res)
+                  let blob = new Blob([res.data], { type: res.headers['content-type'] });
+                  let link = document.createElement('a');
+                  link.href = window.URL.createObjectURL(blob);
+                  link.download =item.slice(item.lastIndexOf('/')+1);
+                  link.click()
               }).catch(err=>{
 
               })

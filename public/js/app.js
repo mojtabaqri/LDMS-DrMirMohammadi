@@ -3692,7 +3692,14 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/downloadFile', {
         'file': item
       }).then(function (res) {
-        console.log(res.data);
+        console.log(res);
+        var blob = new Blob([res.data], {
+          type: res.headers['content-type']
+        });
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = item.slice(item.lastIndexOf('/') + 1);
+        link.click();
       })["catch"](function (err) {});
     }
   }
