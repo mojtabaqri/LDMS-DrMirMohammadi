@@ -2222,16 +2222,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       demandContent: 'بدون متن',
       replyContent: 'بدون پاسخ',
-      filesObject: [{
-        'address': 'http://sadasdasdasdasdadasdsad',
-        'ext': 'name.png'
-      }, {
-        'address': 'http://sadasdasdasdasdadasdsad',
-        'ext': 'test.jpg'
-      }, {
-        'address': 'http://sadasdasdasdasdadasdsad',
-        'ext': 'fuke.docx'
-      }],
+      filesObject: null,
       snackbarText: '',
       selected: [],
       snackbarColor: '',
@@ -2388,61 +2379,41 @@ __webpack_require__.r(__webpack_exports__);
         return Promise.reject(error);
       });
     },
-    editItem: function editItem(item) {
-      this.editedIndex = this.desserts.data.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+    singleItem: function singleItem(item) {
+      var _this5 = this;
+
+      axios.get('/api/demand/singleDemand/' + item.id).then(function (res) {
+        _this5.filesObject = res.data.data.attachment;
+      })["catch"](function (err) {});
       this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
-      var _this5 = this;
+      var _this6 = this;
 
       var index = this.desserts.data.indexOf(item);
       var decide = confirm(' آیا برای حذف این آیتم اطمینان دارید؟');
 
       if (decide) {
         axios["delete"]('/api/demand/' + item.id).then(function (res) {
-          _this5.desserts.data.splice(index, 1);
+          _this6.desserts.data.splice(index, 1);
 
-          _this5.snackbarColor = 'error';
-          _this5.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
-          _this5.snackbar = true;
+          _this6.snackbarColor = 'error';
+          _this6.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
+          _this6.snackbar = true;
         })["catch"](function (err) {});
       }
     },
     close: function close() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.dialog = false;
       setTimeout(function () {
-        _this6.editedItem = Object.assign({}, _this6.defaultItem);
-        _this6.editedIndex = -1;
+        _this7.editedItem = Object.assign({}, _this7.defaultItem);
+        _this7.editedIndex = -1;
       }, 300);
     },
     save: function save() {
-      var _this7 = this;
-
-      if (this.editedIndex > -1) {
-        axios.put('/api/demand/' + this.editedItem.id, {
-          'demandId': this.editedItem.name,
-          'email': this.editedItem.email
-        }).then(function (res) {
-          _this7.snackbarColor = 'success';
-          _this7.snackbarText = 'ویرایش انجام شد !';
-          _this7.snackbar = true;
-          Object.assign(_this7.desserts.data[_this7.editedIndex], res.data.demand);
-        })["catch"](function (err) {});
-      } else {
-        axios.post('/api/demand', {
-          'name': this.editedItem.name,
-          'email': this.editedItem.email
-        }).then(function (res) {
-          _this7.desserts.data.push(res.data.demand);
-
-          _this7.snackbarColor = 'success';
-          _this7.snackbarText = 'با موفقیت اضافه شد !';
-          _this7.snackbar = true;
-        })["catch"](function (err) {});
-      }
+      if (this.editedIndex > -1) {}
 
       this.close();
     }
@@ -3709,10 +3680,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "attachFileComponent",
   props: {
     'file_directory': Array
+  },
+  methods: {
+    downloadItem: function downloadItem(item) {
+      axios.post('/api/downloadFile', {
+        'file': item
+      }).then(function (res) {
+        console.log(res.data);
+      })["catch"](function (err) {});
+    }
   }
 });
 
@@ -42956,7 +42938,7 @@ var render = function() {
                 attrs: { small: "" },
                 on: {
                   click: function($event) {
-                    return _vm.editItem(item)
+                    return _vm.singleItem(item)
                   }
                 }
               },
@@ -44638,7 +44620,14 @@ var render = function() {
         _vm._l(_vm.file_directory, function(item, i) {
           return _c(
             "v-list-item",
-            { key: i },
+            {
+              key: i,
+              on: {
+                click: function($event) {
+                  return _vm.downloadItem(item)
+                }
+              }
+            },
             [
               _c(
                 "v-list-item-icon",
@@ -44649,22 +44638,13 @@ var render = function() {
               _c(
                 "v-list-item-content",
                 [
-                  _c(
-                    "v-list-item-title",
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          attrs: {
-                            to: { name: item.address },
-                            target: "_blank"
-                          }
-                        },
-                        [_vm._v(_vm._s(item.ext))]
-                      )
-                    ],
-                    1
-                  )
+                  _c("v-list-item-title", [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(item.slice(item.lastIndexOf("/") + 1)) +
+                        "\n                "
+                    )
+                  ])
                 ],
                 1
               )

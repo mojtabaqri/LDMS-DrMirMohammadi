@@ -30,6 +30,10 @@ Route::group(['middleware'=>['auth:api'],'namespace'=>'Api'],function (){
 //روت مخصوص گزارشات
     Route::resource('report','ReportController')->only(['store','index','destroy','update','show'])->middleware('phoneVerify');
     Route::post('/report/delete','ReportController@deleteAll')->name('deleteAllReport');
+//Download Route
+    Route::post('/downloadFile','DownloadController@downloadFile');
+
 });
+
 Route::post('login','Api\UserController@login');
 Route::post('register','Api\UserController@register');

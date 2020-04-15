@@ -51,12 +51,12 @@ class DemandController extends Controller
         //-------------------------------------------- Valid Uploaded File -------------------------------
         $request->data=json_decode($request->data); //دریافت به صورت جیسون و تبدیل به شی
         $demand=new Demand(['title' => $request->data->title,'tracking'=>rand(38722,102266).rand(1321,2163),'content'=>$request->data->demandContent,'user_id'=>auth('api')->user()->id]);
-        $path='demands/'.$demand->id.'/files/';
         if($demand->save()) //اگر درخواست در دیتابیس قبت شد
         {
             //----------------------------File Upload Scope---------------------------------------
             if($request->hasfile('file'))
             {
+
                 $path='demands/'.$demand->id.'/files/';
                 foreach($request->file('file') as $file)
                 {
@@ -143,9 +143,10 @@ class DemandController extends Controller
     public function singleDemand($id) // Show Single Demand with files
     {
         $demand=Demand::find($id);
-        if($demand){
-            return new singleDemandResource($demand->with(['replies','users']));
-        }
+        if($demand)
+            return new singleDemandResource($demand);
+        return response()->json(['state'=>'مطالبه یافت نشد!'],403);
+
      }
 }
 

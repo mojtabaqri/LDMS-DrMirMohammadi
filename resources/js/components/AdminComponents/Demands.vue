@@ -122,7 +122,7 @@
             <v-icon
                 small
                 class="mr-2"
-                @click="editItem(item)"
+                @click="singleItem(item)"
             >
                 mdi-file-document-box-search           </v-icon>
             <v-icon
@@ -148,22 +148,7 @@
         data: () => ({
             demandContent:'بدون متن',
             replyContent:'بدون پاسخ',
-            filesObject:[
-                {
-                    'address':'http://sadasdasdasdasdadasdsad',
-                    'ext':'name.png'
-                },
-                {
-                    'address':'http://sadasdasdasdasdadasdsad',
-                    'ext':'test.jpg'
-
-                },
-                {
-                    'address':'http://sadasdasdasdasdadasdsad',
-                    'ext':'fuke.docx'
-
-                },
-            ],
+            filesObject:null,
             snackbarText:'',
             selected:[],
             snackbarColor:'',
@@ -299,9 +284,11 @@
 
 
             },
-            editItem (item) {
-                this.editedIndex = this.desserts.data.indexOf(item)
-                this.editedItem = Object.assign({}, item)
+            singleItem (item) {
+                axios.get('/api/demand/singleDemand/'+item.id,).then(res=>{
+                     this.filesObject = res.data.data.attachment;
+                }).catch(err=>{
+                });
                 this.dialog = true
             },
             deleteItem (item) {
@@ -326,35 +313,10 @@
                 }, 300)
             },
             save () {
-
                 if (this.editedIndex > -1) {
-                    axios.put('/api/demand/'+this.editedItem.id,{
-                        'demandId': this.editedItem.name,
-                        'email':this.editedItem.email,
-                    }).then(res=>{
-                        this.snackbarColor='success';
-                        this.snackbarText ='ویرایش انجام شد !';
-                        this.snackbar=true;
-                        Object.assign(this.desserts.data[this.editedIndex], res.data.demand)
-                    }).catch(err=>{
 
-                    });
-                } else {
-                    axios.post('/api/demand',
-                        {
-                            'name': this.editedItem.name,
-                            'email':this.editedItem.email,
-
-                        }
-                    ).then(res=>{
-                        this.desserts.data.push(res.data.demand);
-                        this.snackbarColor='success';
-                        this.snackbarText ='با موفقیت اضافه شد !';
-                        this.snackbar=true;
-                    }).catch(err=>{})
                 }
                 this.close()
-
             },
         },
     }
