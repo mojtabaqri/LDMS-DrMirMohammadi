@@ -97,15 +97,22 @@ class DemandController extends Controller
         //متد پاسخ دادن به مطالبه
         $reply=$request->reply;
         $demand=Demand::find($id);
-        if($demand)
-        {
+        if(!$demand)
+            return response()->json(['msg'=>'مطالبه یافت نشد!'],403);
+
+        if($demand->replies){
             $demand->replies->text=$reply;
             $demand->replies->admin_id=auth('api')->user()->id;
             $demand->replies()->save($demand->replies);
-            $demand->updated_at=now();
-            $demand->save();
-            return response()->json(['demand'=>new DemandResource($demand)],200);
         }
+        else{
+            $demand->replies()->save(new Reply(['demand_id'=>$demand->id,'admin_id'=>auth('api')->user()->id,'text'=>$reply]));
+        }
+            $demand->updated_at=now();
+            if($demand->save())
+                return response()->json(['demand'=>new DemandResource($demand)],200);
+
+
 
     }
 

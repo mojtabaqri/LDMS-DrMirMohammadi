@@ -2213,6 +2213,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2220,8 +2221,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      demandContent: 'بدون متن',
-      replyContent: 'بدون پاسخ',
       filesObject: null,
       snackbarText: '',
       selected: [],
@@ -2382,10 +2381,12 @@ __webpack_require__.r(__webpack_exports__);
     singleItem: function singleItem(item) {
       var _this5 = this;
 
+      this.editedIndex = this.desserts.data.indexOf(item);
+      this.editedItem = Object.assign({}, item);
       axios.get('/api/demand/singleDemand/' + item.id).then(function (res) {
         _this5.filesObject = res.data.data.attachment;
+        _this5.dialog = true;
       })["catch"](function (err) {});
-      this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
       var _this6 = this;
@@ -2413,7 +2414,18 @@ __webpack_require__.r(__webpack_exports__);
       }, 300);
     },
     save: function save() {
-      if (this.editedIndex > -1) {}
+      var _this8 = this;
+
+      if (this.editedIndex > -1) {
+        axios.put('/api/demand/' + this.editedItem.id, {
+          'reply': this.editedItem.reply
+        }).then(function (res) {
+          _this8.snackbarColor = 'success';
+          _this8.snackbarText = 'پاسخ داده شد   !';
+          _this8.snackbar = true;
+          Object.assign(_this8.desserts.data[_this8.editedIndex], res.data.demand);
+        })["catch"](function (err) {});
+      }
 
       this.close();
     }
@@ -42766,6 +42778,17 @@ var render = function() {
                                               attrs: {
                                                 label: "عنوان مطالبه",
                                                 readonly: ""
+                                              },
+                                              model: {
+                                                value: _vm.editedItem.title,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.editedItem,
+                                                    "title",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "editedItem.title"
                                               }
                                             })
                                           ],
@@ -42784,8 +42807,18 @@ var render = function() {
                                                 name: "input-7-1",
                                                 filled: "",
                                                 label: "متن مطالبه",
-                                                readonly: "",
-                                                value: _vm.demandContent
+                                                readonly: ""
+                                              },
+                                              model: {
+                                                value: _vm.editedItem.content,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.editedItem,
+                                                    "content",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression: "editedItem.content"
                                               }
                                             })
                                           ],
@@ -42811,17 +42844,22 @@ var render = function() {
                                         _c(
                                           "v-col",
                                           {
-                                            staticClass: " p-3 mt-2 white",
+                                            staticClass:
+                                              " p-3 mt-2 white indigo--text",
                                             attrs: { cols: "12" }
                                           },
                                           [
                                             _c("vue-editor", {
                                               model: {
-                                                value: _vm.replyContent,
+                                                value: _vm.editedItem.reply,
                                                 callback: function($$v) {
-                                                  _vm.replyContent = $$v
+                                                  _vm.$set(
+                                                    _vm.editedItem,
+                                                    "reply",
+                                                    $$v
+                                                  )
                                                 },
-                                                expression: "replyContent"
+                                                expression: "editedItem.reply"
                                               }
                                             })
                                           ],

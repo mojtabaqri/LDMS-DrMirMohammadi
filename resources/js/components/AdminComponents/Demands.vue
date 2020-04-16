@@ -53,6 +53,7 @@
                                                 <v-text-field
                                                     label="عنوان مطالبه"
                                                     readonly
+                                                    v-model="editedItem.title"
                                                     ></v-text-field>
                                             </v-col>
                                             <v-col cols="12" class=" p-3 mt-2 ">
@@ -61,14 +62,14 @@
                                                     filled
                                                     label="متن مطالبه"
                                                     readonly
-                                                    :value="demandContent"
+                                                    v-model="editedItem.content"
                                                 ></v-textarea>
                                             </v-col>
                                             <v-col cols="12" class=" p-3 mt-2">
                                              <attach-file-component :file_directory=filesObject></attach-file-component>
                                             </v-col>
-                                            <v-col cols="12" class=" p-3 mt-2 white">
-                                                <vue-editor v-model="replyContent" />
+                                            <v-col cols="12" class=" p-3 mt-2 white indigo--text">
+                                                <vue-editor v-model="editedItem.reply" />
                                             </v-col>
 
                                         </v-row>
@@ -146,8 +147,6 @@
           'attachFileComponent':attachFileComponent
         },
         data: () => ({
-            demandContent:'بدون متن',
-            replyContent:'بدون پاسخ',
             filesObject:null,
             snackbarText:'',
             selected:[],
@@ -285,11 +284,14 @@
 
             },
             singleItem (item) {
+                this.editedIndex = this.desserts.data.indexOf(item)
+                this.editedItem = Object.assign({}, item)
                 axios.get('/api/demand/singleDemand/'+item.id,).then(res=>{
                      this.filesObject = res.data.data.attachment;
+                    this.dialog = true
+
                 }).catch(err=>{
                 });
-                this.dialog = true
             },
             deleteItem (item) {
                 const index = this.desserts.data.indexOf(item)
@@ -314,7 +316,16 @@
             },
             save () {
                 if (this.editedIndex > -1) {
+                    axios.put('/api/demand/'+this.editedItem.id,{
+                        'reply': this.editedItem.reply,
+                    }).then(res=>{
+                        this.snackbarColor='success';
+                        this.snackbarText ='پاسخ داده شد   !';
+                        this.snackbar=true;
+                        Object.assign(this.desserts.data[this.editedIndex], res.data.demand)
+                    }).catch(err=>{
 
+                    });
                 }
                 this.close()
             },
