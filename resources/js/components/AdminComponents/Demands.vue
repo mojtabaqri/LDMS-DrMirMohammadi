@@ -68,8 +68,13 @@
                                             <v-col cols="12" class=" p-3 mt-2">
                                              <attach-file-component :file_directory=filesObject></attach-file-component>
                                             </v-col>
-                                            <v-col cols="12" class=" p-3 mt-2 white indigo--text">
-                                                <vue-editor v-model="editedItem.reply" />
+                                            <v-col cols="12" class=" p-3 mt-2">
+                                                <v-textarea
+                                                    name="input-7-1"
+                                                    filled
+                                                    label="پاسخ به مطالبه"
+                                                    v-model="editedItem.reply"
+                                                ></v-textarea>
                                             </v-col>
 
                                         </v-row>
@@ -316,15 +321,15 @@
             },
             save () {
                 if (this.editedIndex > -1) {
+                    let index=this.editedIndex;
                     axios.put('/api/demand/'+this.editedItem.id,{
                         'reply': this.editedItem.reply,
                     }).then(res=>{
                         this.snackbarColor='success';
                         this.snackbarText ='پاسخ داده شد   !';
                         this.snackbar=true;
-                        Object.assign(this.desserts.data[this.editedIndex], res.data.demand)
+                        Object.assign(this.desserts.data[index],res.data.demand)
                     }).catch(err=>{
-
                     });
                 }
                 this.close()

@@ -2214,6 +2214,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2417,13 +2422,14 @@ __webpack_require__.r(__webpack_exports__);
       var _this8 = this;
 
       if (this.editedIndex > -1) {
+        var index = this.editedIndex;
         axios.put('/api/demand/' + this.editedItem.id, {
           'reply': this.editedItem.reply
         }).then(function (res) {
           _this8.snackbarColor = 'success';
           _this8.snackbarText = 'پاسخ داده شد   !';
           _this8.snackbar = true;
-          Object.assign(_this8.desserts.data[_this8.editedIndex], res.data.demand);
+          Object.assign(_this8.desserts.data[index], res.data.demand);
         })["catch"](function (err) {});
       }
 
@@ -42844,12 +42850,16 @@ var render = function() {
                                         _c(
                                           "v-col",
                                           {
-                                            staticClass:
-                                              " p-3 mt-2 white indigo--text",
+                                            staticClass: " p-3 mt-2",
                                             attrs: { cols: "12" }
                                           },
                                           [
-                                            _c("vue-editor", {
+                                            _c("v-textarea", {
+                                              attrs: {
+                                                name: "input-7-1",
+                                                filled: "",
+                                                label: "پاسخ به مطالبه"
+                                              },
                                               model: {
                                                 value: _vm.editedItem.reply,
                                                 callback: function($$v) {
