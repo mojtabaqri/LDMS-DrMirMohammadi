@@ -2227,6 +2227,10 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       filesObject: null,
+      fullDemand: '',
+      fullReply: '',
+      fullTitle: '',
+      fullContent: '',
       snackbarText: '',
       selected: [],
       snackbarColor: '',
@@ -2390,6 +2394,9 @@ __webpack_require__.r(__webpack_exports__);
       this.editedItem = Object.assign({}, item);
       axios.get('/api/demand/singleDemand/' + item.id).then(function (res) {
         _this5.filesObject = res.data.data.attachment;
+        _this5.fullTitle = res.data.data.title;
+        _this5.fullContent = res.data.data.content;
+        _this5.fullReply = res.data.data.reply;
         _this5.dialog = true;
       })["catch"](function (err) {});
     },
@@ -2424,7 +2431,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.editedIndex > -1) {
         var index = this.editedIndex;
         axios.put('/api/demand/' + this.editedItem.id, {
-          'reply': this.editedItem.reply
+          'reply': this.fullReply
         }).then(function (res) {
           _this8.snackbarColor = 'success';
           _this8.snackbarText = 'پاسخ داده شد   !';
@@ -42786,15 +42793,11 @@ var render = function() {
                                                 readonly: ""
                                               },
                                               model: {
-                                                value: _vm.editedItem.title,
+                                                value: _vm.fullTitle,
                                                 callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.editedItem,
-                                                    "title",
-                                                    $$v
-                                                  )
+                                                  _vm.fullTitle = $$v
                                                 },
-                                                expression: "editedItem.title"
+                                                expression: "fullTitle"
                                               }
                                             })
                                           ],
@@ -42816,15 +42819,11 @@ var render = function() {
                                                 readonly: ""
                                               },
                                               model: {
-                                                value: _vm.editedItem.content,
+                                                value: _vm.fullContent,
                                                 callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.editedItem,
-                                                    "content",
-                                                    $$v
-                                                  )
+                                                  _vm.fullContent = $$v
                                                 },
-                                                expression: "editedItem.content"
+                                                expression: "fullContent"
                                               }
                                             })
                                           ],
@@ -42861,15 +42860,11 @@ var render = function() {
                                                 label: "پاسخ به مطالبه"
                                               },
                                               model: {
-                                                value: _vm.editedItem.reply,
+                                                value: _vm.fullReply,
                                                 callback: function($$v) {
-                                                  _vm.$set(
-                                                    _vm.editedItem,
-                                                    "reply",
-                                                    $$v
-                                                  )
+                                                  _vm.fullReply = $$v
                                                 },
-                                                expression: "editedItem.reply"
+                                                expression: "fullReply"
                                               }
                                             })
                                           ],

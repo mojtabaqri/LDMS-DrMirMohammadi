@@ -53,7 +53,7 @@
                                                 <v-text-field
                                                     label="عنوان مطالبه"
                                                     readonly
-                                                    v-model="editedItem.title"
+                                                    v-model="fullTitle"
                                                     ></v-text-field>
                                             </v-col>
                                             <v-col cols="12" class=" p-3 mt-2 ">
@@ -62,7 +62,7 @@
                                                     filled
                                                     label="متن مطالبه"
                                                     readonly
-                                                    v-model="editedItem.content"
+                                                    v-model="fullContent"
                                                 ></v-textarea>
                                             </v-col>
                                             <v-col cols="12" class=" p-3 mt-2">
@@ -73,7 +73,7 @@
                                                     name="input-7-1"
                                                     filled
                                                     label="پاسخ به مطالبه"
-                                                    v-model="editedItem.reply"
+                                                    v-model="fullReply"
                                                 ></v-textarea>
                                             </v-col>
 
@@ -153,6 +153,10 @@
         },
         data: () => ({
             filesObject:null,
+            fullDemand:'',
+            fullReply:'',
+            fullTitle:'',
+            fullContent:'',
             snackbarText:'',
             selected:[],
             snackbarColor:'',
@@ -293,6 +297,9 @@
                 this.editedItem = Object.assign({}, item)
                 axios.get('/api/demand/singleDemand/'+item.id,).then(res=>{
                      this.filesObject = res.data.data.attachment;
+                     this.fullTitle=res.data.data.title;
+                     this.fullContent=res.data.data.content;
+                     this.fullReply=res.data.data.reply;
                     this.dialog = true
 
                 }).catch(err=>{
@@ -323,7 +330,7 @@
                 if (this.editedIndex > -1) {
                     let index=this.editedIndex;
                     axios.put('/api/demand/'+this.editedItem.id,{
-                        'reply': this.editedItem.reply,
+                        'reply': this.fullReply,
                     }).then(res=>{
                         this.snackbarColor='success';
                         this.snackbarText ='پاسخ داده شد   !';
