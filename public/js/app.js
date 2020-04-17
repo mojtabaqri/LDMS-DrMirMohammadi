@@ -2219,6 +2219,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -42782,10 +42791,7 @@ var render = function() {
                                       [
                                         _c(
                                           "v-col",
-                                          {
-                                            staticClass: "offset-4",
-                                            attrs: { cols: "8" }
-                                          },
+                                          { attrs: { cols: "8" } },
                                           [
                                             _c("v-text-field", {
                                               attrs: {
@@ -42800,6 +42806,36 @@ var render = function() {
                                                 expression: "fullTitle"
                                               }
                                             })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            staticClass:
+                                              "d-inline-flex justify-center",
+                                            attrs: { cols: "4" }
+                                          },
+                                          [
+                                            _c(
+                                              "v-avatar",
+                                              { attrs: { size: "90" } },
+                                              [
+                                                _c("img", {
+                                                  staticClass: "grey lighten-2",
+                                                  attrs: {
+                                                    src:
+                                                      _vm.editedItem
+                                                        .userprofile,
+                                                    "lazy-src":
+                                                      _vm.editedItem
+                                                        .userprofile,
+                                                    alt: "تصویر کاربر"
+                                                  }
+                                                })
+                                              ]
+                                            )
                                           ],
                                           1
                                         ),

@@ -49,13 +49,22 @@
                             <v-container>
                                     <v-form>
                                         <v-row>
-                                            <v-col cols="8" class="offset-4">
+                                            <v-col cols="8">
                                                 <v-text-field
                                                     label="عنوان مطالبه"
                                                     readonly
                                                     v-model="fullTitle"
                                                     ></v-text-field>
                                             </v-col>
+                                            <v-col cols="4" class="d-inline-flex justify-center">
+                                                <v-avatar size="90">
+                                                    <img
+                                                        :src="editedItem.userprofile"
+                                                        :lazy-src="editedItem.userprofile"
+                                                        alt="تصویر کاربر"
+                                                        class="grey lighten-2"
+                                                    >
+                                                </v-avatar>                                            </v-col>
                                             <v-col cols="12" class=" p-3 mt-2 ">
                                                 <v-textarea
                                                     name="input-7-1"
