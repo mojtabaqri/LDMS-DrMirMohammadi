@@ -58,7 +58,6 @@ class AuthCommand extends Command
         }
 
         $this->ensureDirectoriesExist();
-
         $this->exportViews();
 
         if (! $this->option('views')) {
@@ -112,6 +111,8 @@ class AuthCommand extends Command
      */
     protected function exportBackend()
     {
+        $this->callSilent('ui:controllers');
+
         file_put_contents(
             app_path('Http/Controllers/HomeController.php'),
             $this->compileControllerStub()
@@ -121,6 +122,11 @@ class AuthCommand extends Command
             base_path('routes/web.php'),
             file_get_contents(__DIR__.'/Auth/stubs/routes.stub'),
             FILE_APPEND
+        );
+
+        copy(
+            __DIR__.'/../stubs/migrations/2014_10_12_100000_create_password_resets_table.php',
+            base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php')
         );
     }
 
