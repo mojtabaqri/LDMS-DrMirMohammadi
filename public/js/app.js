@@ -104934,6 +104934,9 @@ var NormalRoute = [{
   mutations: {
     setProfile: function setProfile(state, Pic) {
       state.pic = Pic;
+    },
+    setLevel: function setLevel(state, Level) {
+      state.level = Level;
     }
   },
   getters: {

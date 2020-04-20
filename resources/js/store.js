@@ -27,6 +27,9 @@ export default new Vuex.Store({
      setProfile:(state ,Pic)=>{
        state.pic=Pic;
      },
+        setLevel:(state ,Level)=>{
+            state.level= Level
+        },
     },
     getters:{
         items:state =>{
