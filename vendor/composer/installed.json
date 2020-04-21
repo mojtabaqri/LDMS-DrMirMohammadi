@@ -2120,6 +2120,60 @@
         ]
     },
     {
+        "name": "mohsenbostan/ghasedak-sms",
+        "version": "1.2.2",
+        "version_normalized": "1.2.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mohsenbostan/ghasedak-sms.git",
+            "reference": "af8727ce694c8f79ded19a6d8082152fda427fd2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/mohsenbostan/ghasedak-sms/zipball/af8727ce694c8f79ded19a6d8082152fda427fd2",
+            "reference": "af8727ce694c8f79ded19a6d8082152fda427fd2",
+            "shasum": ""
+        },
+        "require": {
+            "guzzlehttp/guzzle": "^6.5",
+            "illuminate/support": "^7.0",
+            "nesbot/carbon": "^2.16"
+        },
+        "time": "2020-03-09T15:18:44+00:00",
+        "type": "library",
+        "extra": {
+            "laravel": {
+                "providers": [
+                    "MohsenBostan\\GhasedakSmsServiceProvider"
+                ]
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "MohsenBostan\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Mohsen Bostan",
+                "email": "mohsenbostandev@gmail.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Ghasedak Team",
+                "email": "info@ghasedak.io",
+                "role": "Company"
+            }
+        ],
+        "description": "Ghasedak SMS service package for laravel.",
+        "homepage": "https://github.com/mohsenbostan/ghasedak-sms"
+    },
+    {
         "name": "monolog/monolog",
         "version": "2.0.2",
         "version_normalized": "2.0.2.0",

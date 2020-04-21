@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use MohsenBostan\GhasedakSms;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Carbon;
@@ -222,6 +223,7 @@ class UserController extends Controller
                 $upateUserVerify->mobile_verified_at=now();
                 $upateUserVerify->save();
                 $msg='حساب شما با موفقیت تایید شد';
+                $sms = GhasedakSms::sendSingleSMS($msg, auth('api')->user()->phone);
                 $errCode=200;
             }
             else{
@@ -243,6 +245,7 @@ class UserController extends Controller
             $token->expired=now()->addSeconds(60);
             $token->token=$randomToken;
             $token->save();
+            $sms = GhasedakSms::sendSingleSMS("کد احراز هویت شما در سامانه ی سما ".$randomToken."میباشد  ", auth('api')->user()->phone);
             return response()->json(['msg'=>$msg],$errCode);
 
         }
