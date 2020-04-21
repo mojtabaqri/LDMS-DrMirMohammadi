@@ -2456,6 +2456,366 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Reports.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AdminComponents/Reports.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _customComponent_attachFileComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../customComponent/attachFileComponent */ "./resources/js/components/customComponent/attachFileComponent.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    'attachFileComponent': _customComponent_attachFileComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      filesObject: null,
+      fullDemand: '',
+      fullTitle: '',
+      fullContent: '',
+      snackbarText: '',
+      selected: [],
+      snackbarColor: '',
+      snackbar: false,
+      loading: false,
+      dialog: false,
+      headers: [{
+        text: ' سریال',
+        align: 'start',
+        sortable: false,
+        value: 'id'
+      }, {
+        text: 'عنوان',
+        value: 'title'
+      }, {
+        text: 'متن گزارش',
+        value: 'content'
+      }, {
+        text: 'نام کاربر',
+        value: 'username'
+      }, {
+        text: 'تصویر کاربر',
+        value: 'userprofile'
+      }, {
+        text: 'شماره همراه کاربر',
+        value: 'userphone'
+      }, {
+        text: 'عملیات',
+        value: 'action',
+        sortable: false
+      }],
+      desserts: [],
+      editedIndex: -1,
+      editedItem: {
+        id: '',
+        title: '',
+        content: '',
+        username: '',
+        userphone: '',
+        userprofile: null
+      },
+      defaultItem: {
+        id: '',
+        title: '',
+        content: '',
+        username: '',
+        userphone: '',
+        userprofile: null
+      }
+    };
+  },
+  computed: {
+    formTitle: function formTitle() {
+      return this.editedIndex === -1 ? ' حذف گزارش' : 'مشاهده گزارش:  ' + this.editedItem.title;
+    }
+  },
+  watch: {
+    dialog: function dialog(val) {
+      val || this.close();
+    }
+  },
+  created: function created() {
+    this.initialize();
+  },
+  methods: {
+    selectAll: function selectAll(e) {
+      this.selected = [];
+
+      if (e.length > 0) {
+        this.selected = e.map(function (val) {
+          return val.id;
+        });
+      }
+    },
+    deleteAll: function deleteAll() {
+      var _this = this;
+
+      var decide = confirm(' آیا برای حذف این آیتم  ها اطمینان دارید؟');
+
+      if (decide) {
+        axios.post('/api/report/delete', {
+          'reports': this.selected
+        }).then(function (res) {
+          _this.selected.map(function (value) {
+            var index = _this.desserts.data.indexOf(value);
+
+            _this.desserts.data.splice(index, 1);
+          }); //snackbar setting
+
+
+          _this.snackbarColor = 'success';
+          _this.snackbarText = 'این آیتم ها با موفقیت حذف شندند !  ';
+          _this.snackbar = true;
+        })["catch"](function (err) {
+          _this.snackbarColor = 'error';
+          _this.snackbarText = err.response.data.state;
+          _this.snackbar = true;
+        });
+      }
+    },
+    search: function search(e) {
+      var _this2 = this;
+
+      if (e.length > 3) {
+        axios.get('/api/report/' + e).then(function (res) {
+          _this2.desserts = res.data.report;
+        })["catch"](function (err) {});
+      } else if (e.length == 0) {
+        axios.get('/api/report').then(function (res) {
+          _this2.desserts = res.data.report;
+        })["catch"](function (err) {});
+      }
+    },
+    paginate: function paginate(e) {
+      var _this3 = this;
+
+      var parameters = {
+        'params': {
+          'per_page': e.itemsPerPage
+        }
+      };
+      axios.get('/api/report?page=' + e.page, parameters).then(function (res) {
+        _this3.desserts = res.data.report;
+      })["catch"](function (err) {
+        if (err.response.status == 401) {
+          axios.post('/api/logout').then(function (res) {
+            localStorage.removeItem('token');
+
+            _this3.$router.push('/login');
+          })["catch"](function (err) {});
+        }
+      });
+    },
+    initialize: function initialize() {
+      var _this4 = this;
+
+      axios.interceptors.request.use(function (config) {
+        _this4.loading = true;
+        return config;
+      }, function (error) {
+        _this4.loading = false;
+        return Promise.reject(error);
+      });
+      axios.interceptors.response.use(function (response) {
+        _this4.loading = false;
+        return response;
+      }, function (error) {
+        _this4.loading = false;
+        return Promise.reject(error);
+      });
+    },
+    singleItem: function singleItem(item) {
+      var _this5 = this;
+
+      this.editedIndex = this.desserts.data.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      axios.get('/api/report/singleReport/' + item.id).then(function (res) {
+        _this5.filesObject = res.data.data.attachment;
+        _this5.fullTitle = res.data.data.title;
+        _this5.fullContent = res.data.data.content;
+        _this5.dialog = true;
+      })["catch"](function (err) {});
+    },
+    deleteItem: function deleteItem(item) {
+      var _this6 = this;
+
+      var index = this.desserts.data.indexOf(item);
+      var decide = confirm(' آیا برای حذف این آیتم اطمینان دارید؟');
+
+      if (decide) {
+        axios["delete"]('/api/report/' + item.id).then(function (res) {
+          _this6.desserts.data.splice(index, 1);
+
+          _this6.snackbarColor = 'error';
+          _this6.snackbarText = 'این آیتم با موفقیت حذف شد !  ';
+          _this6.snackbar = true;
+        })["catch"](function (err) {});
+      }
+    },
+    close: function close() {
+      var _this7 = this;
+
+      this.dialog = false;
+      setTimeout(function () {
+        _this7.editedItem = Object.assign({}, _this7.defaultItem);
+        _this7.editedIndex = -1;
+      }, 300);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Users.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AdminComponents/Users.vue?vue&type=script&lang=js& ***!
@@ -42940,6 +43300,371 @@ var render = function() {
                                 on: { click: _vm.save }
                               },
                               [_vm._v("ذخیره")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-snackbar",
+              {
+                attrs: { left: true, color: _vm.snackbarColor, bottom: true },
+                model: {
+                  value: _vm.snackbar,
+                  callback: function($$v) {
+                    _vm.snackbar = $$v
+                  },
+                  expression: "snackbar"
+                }
+              },
+              [
+                _vm._v(
+                  "\n            " + _vm._s(_vm.snackbarText) + "\n            "
+                ),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { color: "white", text: "" },
+                    on: {
+                      click: function($event) {
+                        _vm.snackbar = false
+                      }
+                    }
+                  },
+                  [_vm._v("\n                بستن\n            ")]
+                )
+              ],
+              1
+            )
+          ]
+        },
+        proxy: true
+      },
+      {
+        key: "item.userprofile",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _c(
+              "v-list-item-avatar",
+              [
+                _c("v-img", {
+                  staticClass: "grey lighten-2",
+                  attrs: {
+                    src: item.userprofile,
+                    "lazy-src": item.userprofile,
+                    "aspect-ratio": "1",
+                    "max-width": "50",
+                    "max-height": "50"
+                  }
+                })
+              ],
+              1
+            )
+          ]
+        }
+      },
+      {
+        key: "item.action",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _c(
+              "v-icon",
+              {
+                staticClass: "mr-2",
+                attrs: { small: "" },
+                on: {
+                  click: function($event) {
+                    return _vm.singleItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-file-document-box-search           ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "v-icon",
+              {
+                attrs: { small: "" },
+                on: {
+                  click: function($event) {
+                    return _vm.deleteItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-delete\n        ")]
+            )
+          ]
+        }
+      },
+      {
+        key: "no-data",
+        fn: function() {
+          return [
+            _c(
+              "v-btn",
+              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
+              [_vm._v("Reset")]
+            )
+          ]
+        },
+        proxy: true
+      }
+    ])
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Reports.vue?vue&type=template&id=4ee8cb8c&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AdminComponents/Reports.vue?vue&type=template&id=4ee8cb8c& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("v-data-table", {
+    staticClass: "elevation-1",
+    attrs: {
+      headers: _vm.headers,
+      items: _vm.desserts.data,
+      "items-per-page": 5,
+      "show-select": "",
+      "footer-props": {
+        itemsPerPageOptions: [5, 10, 15],
+        itemsPerPageText: "نمایش  ",
+        pageText: "گزارش در این صفحه ",
+        "show-current-page": true,
+        "show-first-last-page": true
+      },
+      "sort-by": "calories",
+      loading: _vm.loading,
+      "loading-text": "اندکی صبر کنید ...."
+    },
+    on: { pagination: _vm.paginate, input: _vm.selectAll },
+    scopedSlots: _vm._u([
+      {
+        key: "top",
+        fn: function() {
+          return [
+            _c(
+              "v-toolbar",
+              { attrs: { flat: "" } },
+              [
+                _c("v-toolbar-title", [_vm._v("مدیریت گزارشات  کاربران ")]),
+                _vm._v(" "),
+                _c("v-divider", {
+                  staticClass: "mx-5 mt-4",
+                  attrs: { inset: "", vertical: "" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "v-col",
+                  { staticClass: "mt-3", attrs: { cols: "3", sm: "3" } },
+                  [
+                    _c("v-text-field", {
+                      attrs: { label: "جستجو..." },
+                      on: { input: _vm.search }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("v-spacer"),
+                _vm._v(" "),
+                _c(
+                  "v-dialog",
+                  {
+                    attrs: { "max-width": "800px" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          return [
+                            _c(
+                              "v-btn",
+                              {
+                                staticClass: "mb-2 mx-2",
+                                attrs: { color: "error", dark: "" },
+                                on: { click: _vm.deleteAll }
+                              },
+                              [_vm._v(" حذف گزارشات")]
+                            )
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.dialog,
+                      callback: function($$v) {
+                        _vm.dialog = $$v
+                      },
+                      expression: "dialog"
+                    }
+                  },
+                  [
+                    _vm._v(" "),
+                    _c(
+                      "v-card",
+                      [
+                        _c("v-card-title", [
+                          _c("span", { staticClass: "title" }, [
+                            _vm._v(_vm._s(_vm.formTitle))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-text",
+                          [
+                            _c(
+                              "v-container",
+                              [
+                                _c(
+                                  "v-form",
+                                  [
+                                    _c(
+                                      "v-row",
+                                      [
+                                        _c(
+                                          "v-col",
+                                          { attrs: { cols: "8" } },
+                                          [
+                                            _c("v-text-field", {
+                                              attrs: {
+                                                label: "عنوان گزارشات",
+                                                readonly: ""
+                                              },
+                                              model: {
+                                                value: _vm.fullTitle,
+                                                callback: function($$v) {
+                                                  _vm.fullTitle = $$v
+                                                },
+                                                expression: "fullTitle"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            staticClass:
+                                              "d-inline-flex justify-center",
+                                            attrs: { cols: "4" }
+                                          },
+                                          [
+                                            _c(
+                                              "v-avatar",
+                                              { attrs: { size: "90" } },
+                                              [
+                                                _c("img", {
+                                                  staticClass: "grey lighten-2",
+                                                  attrs: {
+                                                    src:
+                                                      _vm.editedItem
+                                                        .userprofile,
+                                                    "lazy-src":
+                                                      _vm.editedItem
+                                                        .userprofile,
+                                                    alt: "تصویر کاربر"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            staticClass: " p-3 mt-2 ",
+                                            attrs: { cols: "12" }
+                                          },
+                                          [
+                                            _c("v-textarea", {
+                                              attrs: {
+                                                name: "input-7-1",
+                                                filled: "",
+                                                label: "متن گزارشات",
+                                                readonly: ""
+                                              },
+                                              model: {
+                                                value: _vm.fullContent,
+                                                callback: function($$v) {
+                                                  _vm.fullContent = $$v
+                                                },
+                                                expression: "fullContent"
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-col",
+                                          {
+                                            staticClass: " p-3 mt-2",
+                                            attrs: { cols: "12" }
+                                          },
+                                          [
+                                            _c("attach-file-component", {
+                                              attrs: {
+                                                file_directory: _vm.filesObject
+                                              }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "blue darken-1", text: "" },
+                                on: { click: _vm.close }
+                              },
+                              [_vm._v("بستن")]
                             )
                           ],
                           1
@@ -103731,6 +104456,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/AdminComponents/Reports.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/AdminComponents/Reports.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Reports_vue_vue_type_template_id_4ee8cb8c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Reports.vue?vue&type=template&id=4ee8cb8c& */ "./resources/js/components/AdminComponents/Reports.vue?vue&type=template&id=4ee8cb8c&");
+/* harmony import */ var _Reports_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Reports.vue?vue&type=script&lang=js& */ "./resources/js/components/AdminComponents/Reports.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Reports_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Reports_vue_vue_type_template_id_4ee8cb8c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Reports_vue_vue_type_template_id_4ee8cb8c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/AdminComponents/Reports.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/AdminComponents/Reports.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/AdminComponents/Reports.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Reports_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Reports.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Reports.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Reports_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/AdminComponents/Reports.vue?vue&type=template&id=4ee8cb8c&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/AdminComponents/Reports.vue?vue&type=template&id=4ee8cb8c& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Reports_vue_vue_type_template_id_4ee8cb8c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Reports.vue?vue&type=template&id=4ee8cb8c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AdminComponents/Reports.vue?vue&type=template&id=4ee8cb8c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Reports_vue_vue_type_template_id_4ee8cb8c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Reports_vue_vue_type_template_id_4ee8cb8c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/AdminComponents/Users.vue":
 /*!***********************************************************!*\
   !*** ./resources/js/components/AdminComponents/Users.vue ***!
@@ -104757,11 +105551,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_AdminComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/AdminComponent */ "./resources/js/components/AdminComponent.vue");
 /* harmony import */ var _components_AdminComponents_Users__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/AdminComponents/Users */ "./resources/js/components/AdminComponents/Users.vue");
 /* harmony import */ var _components_AdminComponents_Demands__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/AdminComponents/Demands */ "./resources/js/components/AdminComponents/Demands.vue");
-/* harmony import */ var _components_HomeComponents_IndexComponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/HomeComponents/IndexComponent */ "./resources/js/components/HomeComponents/IndexComponent.vue");
-/* harmony import */ var _components_HomeComponents_contentComponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/HomeComponents/contentComponent */ "./resources/js/components/HomeComponents/contentComponent.vue");
-/* harmony import */ var _components_HomeComponents_requestDemand__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/HomeComponents/requestDemand */ "./resources/js/components/HomeComponents/requestDemand.vue");
-/* harmony import */ var _components_HomeComponents_newReport__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/HomeComponents/newReport */ "./resources/js/components/HomeComponents/newReport.vue");
-/* harmony import */ var _components_HomeComponents_latestDemand__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/HomeComponents/latestDemand */ "./resources/js/components/HomeComponents/latestDemand.vue");
+/* harmony import */ var _components_AdminComponents_Reports__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/AdminComponents/Reports */ "./resources/js/components/AdminComponents/Reports.vue");
+/* harmony import */ var _components_HomeComponents_IndexComponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/HomeComponents/IndexComponent */ "./resources/js/components/HomeComponents/IndexComponent.vue");
+/* harmony import */ var _components_HomeComponents_contentComponent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/HomeComponents/contentComponent */ "./resources/js/components/HomeComponents/contentComponent.vue");
+/* harmony import */ var _components_HomeComponents_requestDemand__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/HomeComponents/requestDemand */ "./resources/js/components/HomeComponents/requestDemand.vue");
+/* harmony import */ var _components_HomeComponents_newReport__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/HomeComponents/newReport */ "./resources/js/components/HomeComponents/newReport.vue");
+/* harmony import */ var _components_HomeComponents_latestDemand__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/HomeComponents/latestDemand */ "./resources/js/components/HomeComponents/latestDemand.vue");
+
 
 
 
@@ -104779,22 +105575,22 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
 var routes = [{
   path: '/',
   name: 'index',
-  component: _components_HomeComponents_IndexComponent__WEBPACK_IMPORTED_MODULE_8__["default"],
+  component: _components_HomeComponents_IndexComponent__WEBPACK_IMPORTED_MODULE_9__["default"],
   children: [{
     path: "content",
-    component: _components_HomeComponents_contentComponent__WEBPACK_IMPORTED_MODULE_9__["default"],
+    component: _components_HomeComponents_contentComponent__WEBPACK_IMPORTED_MODULE_10__["default"],
     name: 'content'
   }, {
     path: "requestDemand",
-    component: _components_HomeComponents_requestDemand__WEBPACK_IMPORTED_MODULE_10__["default"],
+    component: _components_HomeComponents_requestDemand__WEBPACK_IMPORTED_MODULE_11__["default"],
     name: 'requestDemand'
   }, {
     path: "newReport",
-    component: _components_HomeComponents_newReport__WEBPACK_IMPORTED_MODULE_11__["default"],
+    component: _components_HomeComponents_newReport__WEBPACK_IMPORTED_MODULE_12__["default"],
     name: 'newReport'
   }, {
     path: "lastestDemand",
-    component: _components_HomeComponents_latestDemand__WEBPACK_IMPORTED_MODULE_12__["default"],
+    component: _components_HomeComponents_latestDemand__WEBPACK_IMPORTED_MODULE_13__["default"],
     name: 'lastestDemand'
   }]
 }, {
@@ -104818,6 +105614,19 @@ var routes = [{
     path: "demands",
     component: _components_AdminComponents_Demands__WEBPACK_IMPORTED_MODULE_7__["default"],
     name: 'demands',
+    beforeEnter: function beforeEnter(to, from, next) {
+      var loggedLevel = localStorage.getItem('loggedLevel');
+
+      if (loggedLevel === "83eebac535d14f791f6ee4dbefe689dc" || loggedLevel === "21232f297a57a5a743894a0e4a801fc3") {
+        next();
+      } else {
+        next('/panel');
+      }
+    }
+  }, {
+    path: "reports",
+    component: _components_AdminComponents_Reports__WEBPACK_IMPORTED_MODULE_8__["default"],
+    name: 'reports',
     beforeEnter: function beforeEnter(to, from, next) {
       var loggedLevel = localStorage.getItem('loggedLevel');
 
@@ -104890,7 +105699,7 @@ var adminRoute = [{
 }, {
   icon: 'mdi-account-badge-outline',
   text: 'مدیریت  گزارشات   ',
-  link: 'demands'
+  link: 'reports'
 }];
 var SuperAdminRoute = [{
   icon: 'mdi-account-group-outline',
@@ -104903,7 +105712,7 @@ var SuperAdminRoute = [{
 }, {
   icon: 'mdi-account-badge-outline',
   text: 'مدیریت  گزارشات   ',
-  link: 'demands'
+  link: 'reports'
 }, {
   icon: 'mdi-account-badge-outline',
   text: 'آمار و ارقام     ',
