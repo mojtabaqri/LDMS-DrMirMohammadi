@@ -80,8 +80,8 @@ class DemandController extends Controller
      */
     public function show($id)
     {
-        $demand = new DemandCollection(Report::where('title','like',"%$id%")->paginate());
-        return response()->json(['demand'=>$demand],200);
+      $demand=Demand::where('title','like',"%$id%")->paginate();
+      return response()->json(['demand'=>$demand],200);
     }
 
     /**
