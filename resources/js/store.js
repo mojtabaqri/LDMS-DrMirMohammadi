@@ -4,12 +4,12 @@ Vue.use(Vuex)
 
 const adminRoute= [
     { icon: 'mdi-account-badge-outline', text: 'مدیریت  مطالبات   ' ,link:'demands'},
-    { icon: 'mdi-account-badge-outline', text: 'مدیریت  گزارشات   ' ,link:'demands'},
+    { icon: 'mdi-account-badge-outline', text: 'مدیریت  گزارشات   ' ,link:'reports'},
 ];
 const SuperAdminRoute= [
     { icon: 'mdi-account-group-outline', text: '  مدیریت کاربران ' ,link:'users'},
     { icon: 'mdi-account-badge-outline', text: 'مدیریت  مطالبات   ' ,link:'demands'},
-    { icon: 'mdi-account-badge-outline', text: 'مدیریت  گزارشات   ' ,link:'demands'},
+    { icon: 'mdi-account-badge-outline', text: 'مدیریت  گزارشات   ' ,link:'reports'},
     { icon: 'mdi-account-badge-outline', text: 'آمار و ارقام     ' ,link:'demands'},
 ];
 const NormalRoute= [
