@@ -18,7 +18,7 @@ class ReportResource extends JsonResource
         return [
             'id'=>$this->id,
             'title'=>$this->title,
-            'text'=>$this->text,
+            'content'=>$this->text,
             'username'=>$this->users->name,
             'userphone'=>$this->users->phone,
             'userprofile'=>$this->users->profiles->photo_path,

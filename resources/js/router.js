@@ -6,6 +6,7 @@ import Verify from './components/AdminComponents/VerifyComponent'
 import Admin from './components/AdminComponent'
 import Users from './components/AdminComponents/Users'
 import Demands from './components/AdminComponents/Demands'
+import Reports from "./components/AdminComponents/Reports";
 import index from './components/HomeComponents/IndexComponent'
 import content from "./components/HomeComponents/contentComponent";
 import requestDemand from "./components/HomeComponents/requestDemand";
@@ -69,6 +70,21 @@ const routes=[
                 path:"demands",
                 component:Demands,
                 name:'demands',
+                beforeEnter:(to,from,next)=> {
+                    let loggedLevel=localStorage.getItem('loggedLevel');
+                    if((loggedLevel==="83eebac535d14f791f6ee4dbefe689dc")|| loggedLevel==="21232f297a57a5a743894a0e4a801fc3")
+                    {
+                        next();
+                    }
+                    else {
+                        next('/panel')
+                    }
+                }
+            },
+            {
+                path:"reports",
+                component:Reports,
+                name:'reports',
                 beforeEnter:(to,from,next)=> {
                     let loggedLevel=localStorage.getItem('loggedLevel');
                     if((loggedLevel==="83eebac535d14f791f6ee4dbefe689dc")|| loggedLevel==="21232f297a57a5a743894a0e4a801fc3")
