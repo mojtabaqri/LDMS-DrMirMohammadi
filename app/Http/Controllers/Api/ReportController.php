@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\File;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReportCollection;
-use App\Http\Resources\singleDemandResource;
-use App\Http\Resources\singleReportResource;
 use App\Report;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -83,8 +81,8 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        $reports = new ReportCollection(Report::where('title','like',"%$id%")->paginate());
-        return response()->json(['report'=>$reports],200);
+        $report=Report::where('title','like',"%$id%")->paginate();
+        return response()->json(['report'=>$report],200);
     }
 
     /**
@@ -130,17 +128,4 @@ class ReportController extends Controller
         if(Report::whereIn('id',$request->reports)->delete())
             return response()->json(['state'=>'ok'],200);
         return response()->json(['state'=>'حذف ناموفق بود'],403);
-    }
-    public function singleReport($id) // Show Single Report with files
-    {
-        $report=Report::find($id);
-        if($report)
-            return new singleReportResource($report);
-        return response()->json(['state'=>'گزارش  یافت نشد!'],403);
-
-    }
-
-
-
-
-}
+    }}
